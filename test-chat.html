@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Chat</title>
+</head>
+<body>
+  <h2>Test /api/chat</h2>
+  <button onclick="testChat()">Send test request</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function testChat() {
+      const resultEl = document.getElementById('result');
+      resultEl.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('https://bissaathi-api.onrender.com/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: 'What is BIS?',
+            language: 'en',
+            history: []
+          })
+        });
+
+        const text = await res.text();
+        resultEl.textContent = `Status: ${res.status}\n\n${text}`;
+      } catch (err) {
+        resultEl.textContent = 'Error: ' + err;
+      }
+    }
+  </script>
+</body>
+</html>

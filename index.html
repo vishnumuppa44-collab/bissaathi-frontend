@@ -315,11 +315,12 @@
   </header>
 
   <nav class="tabs" id="tabs">
-    <div class="tab active" data-tab="language">
+    <!-- New Chat/Home tab -->
+    <div class="tab active" data-tab="chat">
       <span class="dot"></span>
-      <div class="icon">🌐</div>
-      <div class="en" data-i18n="tab_lang_en">Language Selector</div>
-      <div class="hi" data-i18n="tab_lang_hi">भाषा चयन</div>
+      <div class="icon">💬</div>
+      <div class="en">Chat</div>
+      <div class="hi">चैट</div>
     </div>
     <div class="tab" data-tab="verify">
       <div class="icon">✅</div>
@@ -371,18 +372,33 @@
       </div>
     </div>
 
+    <!-- Chat / Home -->
+    <div class="view" id="view-chat" style="max-width: 640px;">
+      <div class="section-title">
+        <h3 data-i18n="chat_title_en">BIS AI Saathi</h3>
+        <p data-i18n="chat_desc_en">Ask me anything about BIS services and Indian Standards.</p>
+      </div>
+      <div class="chat-box" id="chat-box">
+        <!-- Bot messages will be inserted by JS -->
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" data-i18n-placeholder="chat_placeholder_en" placeholder="Type your message…" />
+        <button class="send-btn" id="chat-send">➤</button>
+      </div>
+    </div>
+
     <!-- IS-Code Search -->
     <div class="view" id="view-search" style="max-width: 640px;">
       <div class="section-title">
         <h3 data-i18n="search_title_en">IS-Code Search</h3>
         <p data-i18n="search_desc_en">Describe your product to find the applicable Indian Standard.</p>
       </div>
-      <div class="chat-box" id="chat-box">
-        <!-- Bot welcome message will be inserted by JS -->
+      <div class="chat-box" id="search-chat-box">
+        <!-- Can be used later for real API chat -->
       </div>
       <div class="chat-input-row">
-        <input type="text" id="chat-input" data-i18n-placeholder="chat_placeholder_en" placeholder="e.g. I manufacture LED bulbs for home use..." />
-        <button class="send-btn" id="chat-send">➤</button>
+        <input type="text" id="search-input" data-i18n-placeholder="search_placeholder_en" placeholder="e.g. I manufacture LED bulbs for home use..." />
+        <button class="send-btn" id="search-send">➤</button>
       </div>
     </div>
 
@@ -468,8 +484,6 @@
       gov_hi: "Government of India",
       ai_en: "AI Companion",
       ai_hi: "AI Companion",
-      tab_lang_en: "Language Selector",
-      tab_lang_hi: "Language Selector",
       tab_verify_en: "Verify ISI & Hallmarks",
       tab_verify_hi: "Verify ISI & Hallmarks",
       tab_search_en: "IS-Code Search",
@@ -484,10 +498,12 @@
       choose_lang_hi: "Choose your preferred language to begin",
       continue_en: "Continue",
       continue_hi: "Continue",
+      chat_title_en: "BIS AI Saathi",
+      chat_desc_en: "Ask me anything about BIS services and Indian Standards.",
+      chat_placeholder_en: "Type your message…",
       search_title_en: "IS-Code Search",
       search_desc_en: "Describe your product to find the applicable Indian Standard.",
-      chat_welcome_en: "Namaste! I am BIS AI Saathi. How can I help you today?",
-      chat_placeholder_en: "e.g. I manufacture LED bulbs for home use...",
+      search_placeholder_en: "e.g. I manufacture LED bulbs for home use...",
       verify_title_en: "Verify ISI & Hallmarks",
       verify_desc_en: "Enter a CM/L license number or 6-digit HUID to verify.",
       verify_placeholder_en: "e.g. CML-1234567",
@@ -522,8 +538,6 @@
       gov_hi: "भारत सरकार",
       ai_en: "AI Companion",
       ai_hi: "AI साथी",
-      tab_lang_en: "Language Selector",
-      tab_lang_hi: "भाषा चयन",
       tab_verify_en: "Verify ISI & Hallmarks",
       tab_verify_hi: "विश्वसनीयता जांच",
       tab_search_en: "IS-Code Search",
@@ -538,10 +552,12 @@
       choose_lang_hi: "अपनी पसंदीदा भाषा चुनें",
       continue_en: "Continue",
       continue_hi: "आगे बढ़ें",
+      chat_title_en: "BIS AI Saathi",
+      chat_desc_en: "BIS सेवाओं और भारतीय मानकों के बारे में कुछ भी पूछें।",
+      chat_placeholder_en: "अपना संदेश टाइप करें…",
       search_title_en: "IS-Code Search",
-      search_desc_en: "Describe your product to find the applicable Indian Standard.",
-      chat_welcome_en: "नमस्ते! मैं BIS AI साथी हूँ। मैं आपकी कैसे मदद कर सकता हूँ?",
-      chat_placeholder_en: "उदा. मैं घर के उपयोग के लिए LED बल्ब बनाता हूँ...",
+      search_desc_en: "लागू भारतीय मानक खोजने के लिए अपने उत्पाद का वर्णन करें।",
+      search_placeholder_en: "उदा. मैं घर के उपयोग के लिए LED बल्ब बनाता हूँ...",
       verify_title_en: "Verify ISI & Hallmarks",
       verify_desc_en: "सत्यापित करने के लिए CM/L लाइसेंस नंबर या 6-अंकीय HUID दर्ज करें।",
       verify_placeholder_en: "उदा. CML-1234567",
@@ -573,7 +589,7 @@
     }
   };
 
-  let selectedLanguage = "hi"; // default as per your UI (Hindi selected)
+  let selectedLanguage = "hi"; // default
   let chatInitialized = false;
 
   // ---------- Tab switching ----------
@@ -587,12 +603,6 @@
       const target = tab.getAttribute('data-tab');
       views.forEach(v => v.classList.remove('show'));
       document.getElementById('view-' + target).classList.add('show');
-
-      // Initialize chat when Search tab is opened
-      if (target === 'search' && !chatInitialized) {
-        initChat();
-        chatInitialized = true;
-      }
     });
   });
 
@@ -625,10 +635,10 @@
     });
   }
 
-  // ---------- Continue button -> go to IS-Code Search + apply language ----------
+  // ---------- Continue button -> go to Chat + apply language + intro ----------
   document.getElementById('continue-btn').addEventListener('click', () => {
     applyLanguage(selectedLanguage);
-    goToTab('search');
+    goToTab('chat');
     if (!chatInitialized) {
       initChat();
       chatInitialized = true;
@@ -671,49 +681,86 @@
   const chatBox = document.getElementById('chat-box');
   const chatInput = document.getElementById('chat-input');
 
-  function getBotGreeting() {
-    const texts = i18n[selectedLanguage] || i18n.en;
-    return texts.chat_welcome_en || "Namaste! I am BIS AI Saathi. How can I help you today?";
+  function getBotIntro() {
+    if (selectedLanguage === 'hi') {
+      return [
+        "नमस्ते! मैं BIS AI साथी हूँ।",
+        "मैं आपको BIS सेवाओं और भारतीय मानकों के बारे में मदद कर सकता हूँ।",
+        "बताइए, आप कौन सी सेवा चाहते हैं?",
+        "1. IS-Code Search",
+        "2. Verify ISI & Hallmarks",
+        "3. Consumer Complaints",
+        "4. Manufacturer Help"
+      ];
+    }
+    return [
+      "Namaste! I am BIS AI Saathi.",
+      "I can help you with BIS services and Indian Standards.",
+      "Which service would you like?",
+      "1. IS-Code Search",
+      "2. Verify ISI & Hallmarks",
+      "3. Consumer Complaints",
+      "4. Manufacturer Help"
+    ];
   }
 
   function initChat() {
-    // Add initial greeting
-    addMsg('assistant', getBotGreeting());
+    const lines = getBotIntro();
+    lines.forEach((line, idx) => {
+      setTimeout(() => addMsg('assistant', line), idx * 250);
+    });
   }
 
   function addMsg(role, text) {
     const div = document.createElement('div');
     div.className = 'msg ' + role;
-    div.textContent = text; // plain text, no HTML
+    div.textContent = text;
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  function getBotReply(userText) {
-    const t = userText.toLowerCase();
+  function handleUserMessage(text) {
+    const t = text.toLowerCase();
 
-    // Greetings
-    if (t.includes('hi') || t.includes('hello') || t.includes('namaste') || t.includes('hey')) {
-      const texts = i18n[selectedLanguage] || i18n.en;
-      if (selectedLanguage === 'hi') {
-        return "नमस्ते! मैं BIS AI साथी हूँ। बताइए मैं आपकी कैसे मदद कर सकता हूँ?";
-      }
-      return "Namaste! I'm BIS AI Saathi. Tell me how I can help you.";
+    // Map keywords to tabs
+    if (t.includes('1') || t.includes('search') || t.includes('is-') || t.includes('code')) {
+      addMsg('assistant', selectedLanguage === 'hi'
+        ? "ठीक है, IS-Code Search खोल रहा हूँ। अपना उत्पाद वर्णित करें।"
+        : "Opening IS-Code Search. Describe your product.");
+      setTimeout(() => goToTab('search'), 600);
+      return;
     }
 
-    // BIS / standards related
-    if (t.includes('bis') || t.includes('standard') || t.includes('isi') || t.includes('certif')) {
-      if (selectedLanguage === 'hi') {
-        return "BIS (भारतीय मानक ब्यूरो) उत्पादों की गुणवत्ता और सुरक्षा सुनिश्चित करता है। आप किस उत्पाद या मानक के बारे में जानना चाहेंगे?";
-      }
-      return "BIS (Bureau of Indian Standards) ensures product quality and safety. Which product or standard would you like to know about?";
+    if (t.includes('2') || t.includes('verify') || t.includes('hallmark') || t.includes('isi')) {
+      addMsg('assistant', selectedLanguage === 'hi'
+        ? "ठीक है, Verify ISI & Hallmarks खोल रहा हूँ।"
+        : "Opening Verify ISI & Hallmarks.");
+      setTimeout(() => goToTab('verify'), 600);
+      return;
     }
 
-    // Default helpful reply
+    if (t.includes('3') || t.includes('complaint') || t.includes('consumer')) {
+      addMsg('assistant', selectedLanguage === 'hi'
+        ? "ठीक है, Consumer Complaints खोल रहा हूँ।"
+        : "Opening Consumer Complaints.");
+      setTimeout(() => goToTab('complaints'), 600);
+      return;
+    }
+
+    if (t.includes('4') || t.includes('manufacturer') || t.includes('help')) {
+      addMsg('assistant', selectedLanguage === 'hi'
+        ? "ठीक है, Manufacturer Help खोल रहा हूँ।"
+        : "Opening Manufacturer Help.");
+      setTimeout(() => goToTab('manufacturer'), 600);
+      return;
+    }
+
+    // Default
     if (selectedLanguage === 'hi') {
-      return "मैं आपकी मदद करने के लिए यहाँ हूँ। आप अपने उत्पाद का वर्णन करें या BIS, प्रमाणन, या मानकों के बारे में पूछें।";
+      addMsg('assistant', "कृपया 1–4 में से कोई सेवा चुनें, या सेवा का नाम लिखें (Search, Verify, Complaints, Manufacturer)।");
+    } else {
+      addMsg('assistant', "Please choose a service (1–4) or type its name (Search, Verify, Complaints, Manufacturer).");
     }
-    return "I'm here to help. Describe your product or ask me about BIS, certification, or Indian standards.";
   }
 
   function sendChat() {
@@ -723,11 +770,9 @@
     addMsg('user', val);
     chatInput.value = '';
 
-    // Simulate thinking delay
     setTimeout(() => {
-      const reply = getBotReply(val);
-      addMsg('assistant', reply);
-    }, 400);
+      handleUserMessage(val);
+    }, 300);
   }
 
   document.getElementById('chat-send').addEventListener('click', sendChat);

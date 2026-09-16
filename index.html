@@ -77,44 +77,6 @@
     color: #991b1b;
   }
 
-  /* Tabs */
-  nav.tabs {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    padding: 14px 20px;
-    background: #fff;
-  }
-  @media (max-width: 640px) {
-    nav.tabs { grid-template-columns: repeat(2, 1fr); }
-  }
-  .tab {
-    position: relative;
-    border: 1px solid #e5e7eb;
-    background: #fff;
-    border-radius: 10px;
-    padding: 12px 8px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .tab:hover { border-color: #cbd5e1; background: #f9fafb; }
-  .tab.active { border-color: #93c5fd; background: #eff6ff; }
-  .tab .icon { font-size: 20px; margin-bottom: 6px; }
-  .tab .en { font-size: 12px; font-weight: 600; color: #1f2937; }
-  .tab.active .en { color: #1e3a8a; }
-  .tab .hi { font-size: 11px; color: #6b7280; }
-  .tab.active .hi { color: #1d4ed8; }
-  .dot {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #2563eb;
-  }
-
   /* Main content */
   main {
     flex: 1;
@@ -298,60 +260,30 @@
         alt="Bureau of Indian Standards Logo"
       />
       <div class="gov-text">
-        <div class="en" data-i18n="gov_en">Government of India</div>
-        <div class="hi" data-i18n="gov_hi">भारत सरकार</div>
+        <div class="en">Government of India</div>
+        <div class="hi">भारत सरकार</div>
       </div>
     </div>
 
     <div class="ai-companion">
       <span class="sparkle">✨</span>
       <div class="ai-text">
-        <div class="en" data-i18n="ai_en">AI Companion</div>
-        <div class="hi" data-i18n="ai_hi">AI साथी</div>
+        <div class="en">AI Companion</div>
+        <div class="hi">AI साथी</div>
       </div>
       <!-- System status badge -->
       <div id="system-status" class="system-status">Checking…</div>
     </div>
   </header>
 
-  <nav class="tabs" id="tabs">
-    <!-- New Chat/Home tab -->
-    <div class="tab active" data-tab="chat">
-      <span class="dot"></span>
-      <div class="icon">💬</div>
-      <div class="en">Chat</div>
-      <div class="hi">चैट</div>
-    </div>
-    <div class="tab" data-tab="verify">
-      <div class="icon">✅</div>
-      <div class="en" data-i18n="tab_verify_en">Verify ISI &amp; Hallmarks</div>
-      <div class="hi" data-i18n="tab_verify_hi">विश्वसनीयता जांच</div>
-    </div>
-    <div class="tab" data-tab="search">
-      <div class="icon">🔍</div>
-      <div class="en" data-i18n="tab_search_en">IS-Code Search</div>
-      <div class="hi" data-i18n="tab_search_hi">मानक खोज</div>
-    </div>
-    <div class="tab" data-tab="complaints">
-      <div class="icon">📝</div>
-      <div class="en" data-i18n="tab_complaints_en">Consumer Complaints</div>
-      <div class="hi" data-i18n="tab_complaints_hi">उपभोक्ता शिकायत</div>
-    </div>
-    <div class="tab" data-tab="manufacturer">
-      <div class="icon">🏭</div>
-      <div class="en" data-i18n="tab_manuf_en">Manufacturer Help</div>
-      <div class="hi" data-i18n="tab_manuf_hi">उद्योग सहायता</div>
-    </div>
-  </nav>
-
   <main>
     <!-- Language Selector -->
     <div class="view show" id="view-language">
       <div class="lang-heading">
-        <h1 data-i18n="welcome_en">Welcome to BIS AI Saathi</h1>
-        <h2 data-i18n="welcome_hi">भारतीय मानक ब्यूरो AI साथी</h2>
-        <p data-i18n="choose_lang_en">Choose your preferred language to begin</p>
-        <p data-i18n="choose_lang_hi">अपनी पसंदीदा भाषा चुनें</p>
+        <h1>Welcome to BIS AI Saathi</h1>
+        <h2>भारतीय मानक ब्यूरो AI साथी</h2>
+        <p>Choose your preferred language to begin</p>
+        <p>अपनी पसंदीदा भाषा चुनें</p>
       </div>
       <div class="lang-grid" id="lang-grid">
         <div class="lang-card" data-lang="en"><div class="native">English</div></div>
@@ -365,8 +297,7 @@
       </div>
       <div class="action-row">
         <button class="continue-btn" id="continue-btn">
-          <span data-i18n="continue_en">Continue</span>
-          <span class="sub" data-i18n="continue_hi"> / आगे बढ़ें</span>
+          Continue <span class="sub"> / आगे बढ़ें</span>
         </button>
         <button class="mic-btn" title="Mic / माइक">🎤</button>
       </div>
@@ -375,14 +306,14 @@
     <!-- Chat / Home -->
     <div class="view" id="view-chat" style="max-width: 640px;">
       <div class="section-title">
-        <h3 data-i18n="chat_title_en">BIS AI Saathi</h3>
-        <p data-i18n="chat_desc_en">Ask me anything about BIS services and Indian Standards.</p>
+        <h3>BIS AI Saathi</h3>
+        <p>Ask me anything about BIS services and Indian Standards.</p>
       </div>
       <div class="chat-box" id="chat-box">
         <!-- Bot messages will be inserted by JS -->
       </div>
       <div class="chat-input-row">
-        <input type="text" id="chat-input" data-i18n-placeholder="chat_placeholder_en" placeholder="Type your message…" />
+        <input type="text" id="chat-input" placeholder="Type your message…" />
         <button class="send-btn" id="chat-send">➤</button>
       </div>
     </div>
@@ -390,14 +321,14 @@
     <!-- IS-Code Search -->
     <div class="view" id="view-search" style="max-width: 640px;">
       <div class="section-title">
-        <h3 data-i18n="search_title_en">IS-Code Search</h3>
-        <p data-i18n="search_desc_en">Describe your product to find the applicable Indian Standard.</p>
+        <h3>IS-Code Search</h3>
+        <p>Describe your product to find the applicable Indian Standard.</p>
       </div>
       <div class="chat-box" id="search-chat-box">
         <!-- Can be used later for real API chat -->
       </div>
       <div class="chat-input-row">
-        <input type="text" id="search-input" data-i18n-placeholder="search_placeholder_en" placeholder="e.g. I manufacture LED bulbs for home use..." />
+        <input type="text" id="search-input" placeholder="e.g. I manufacture LED bulbs for home use..." />
         <button class="send-btn" id="search-send">➤</button>
       </div>
     </div>
@@ -405,34 +336,34 @@
     <!-- Verify -->
     <div class="view" id="view-verify" style="max-width: 480px;">
       <div class="section-title">
-        <h3 data-i18n="verify_title_en">Verify ISI &amp; Hallmarks</h3>
-        <p data-i18n="verify_desc_en">Enter a CM/L license number or 6-digit HUID to verify.</p>
+        <h3>Verify ISI &amp; Hallmarks</h3>
+        <p>Enter a CM/L license number or 6-digit HUID to verify.</p>
       </div>
       <div class="verify-row">
-        <input type="text" id="verify-input" data-i18n-placeholder="verify_placeholder_en" placeholder="e.g. CML-1234567" />
-        <button class="verify-btn" id="verify-btn" data-i18n="verify_btn_en">Verify</button>
+        <input type="text" id="verify-input" placeholder="e.g. CML-1234567" />
+        <button class="verify-btn" id="verify-btn">Verify</button>
       </div>
       <div class="result-box" id="verify-result" style="display:none;">
-        <div class="title" data-i18n="verify_valid_title_en">✅ License appears valid</div>
-        <div style="margin-top:4px; color:#166534;" data-i18n="verify_valid_desc_en">Product category: Household electrical appliances. Scheme: ISI Mark (Scheme I).</div>
+        <div class="title">✅ License appears valid</div>
+        <div style="margin-top:4px; color:#166534;">Product category: Household electrical appliances. Scheme: ISI Mark (Scheme I).</div>
       </div>
     </div>
 
     <!-- Complaints -->
     <div class="view" id="view-complaints" style="max-width: 480px;">
       <div class="section-title">
-        <h3 data-i18n="complaints_title_en">Consumer Complaints</h3>
-        <p data-i18n="complaints_desc_en">Tell us about a product quality or certification issue.</p>
+        <h3>Consumer Complaints</h3>
+        <p>Tell us about a product quality or certification issue.</p>
       </div>
       <div class="form-stack" id="complaint-form">
-        <input type="text" data-i18n-placeholder="complaint_product_en" placeholder="Product name" />
+        <input type="text" placeholder="Product name" />
         <select>
-          <option data-i18n="complaint_opt1_en">Issue type: Counterfeit ISI mark</option>
-          <option data-i18n="complaint_opt2_en">Issue type: Product not meeting standard</option>
-          <option data-i18n="complaint_opt3_en">Issue type: Missing certification</option>
+          <option>Issue type: Counterfeit ISI mark</option>
+          <option>Issue type: Product not meeting standard</option>
+          <option>Issue type: Missing certification</option>
         </select>
-        <textarea rows="3" data-i18n-placeholder="complaint_desc_en" placeholder="Describe the issue..."></textarea>
-        <button class="submit-btn" id="complaint-submit" data-i18n="complaint_submit_en">Submit complaint →</button>
+        <textarea rows="3" placeholder="Describe the issue..."></textarea>
+        <button class="submit-btn" id="complaint-submit">Submit complaint →</button>
       </div>
       <div class="result-box" id="complaint-result" style="display:none;"></div>
     </div>
@@ -440,25 +371,25 @@
     <!-- Manufacturer -->
     <div class="view" id="view-manufacturer" style="max-width: 640px;">
       <div class="section-title">
-        <h3 data-i18n="manuf_title_en">Manufacturer Help</h3>
-        <p data-i18n="manuf_desc_en">Select a certification scheme to see the step-by-step process.</p>
+        <h3>Manufacturer Help</h3>
+        <p>Select a certification scheme to see the step-by-step process.</p>
       </div>
       <div class="scheme-grid">
         <div class="scheme-card">
-          <div class="name" data-i18n="manuf_scheme1_en">ISI Mark (Scheme I)</div>
-          <div class="desc" data-i18n="manuf_scheme1_desc_en">Mandatory for products under a Quality Control Order.</div>
+          <div class="name">ISI Mark (Scheme I)</div>
+          <div class="desc">Mandatory for products under a Quality Control Order.</div>
         </div>
         <div class="scheme-card">
-          <div class="name" data-i18n="manuf_scheme2_en">CRS (Scheme II)</div>
-          <div class="desc" data-i18n="manuf_scheme2_desc_en">Compulsory registration for electronics &amp; IT products.</div>
+          <div class="name">CRS (Scheme II)</div>
+          <div class="desc">Compulsory registration for electronics &amp; IT products.</div>
         </div>
         <div class="scheme-card">
-          <div class="name" data-i18n="manuf_scheme3_en">FMCS</div>
-          <div class="desc" data-i18n="manuf_scheme3_desc_en">Foreign Manufacturers Certification Scheme.</div>
+          <div class="name">FMCS</div>
+          <div class="desc">Foreign Manufacturers Certification Scheme.</div>
         </div>
         <div class="scheme-card">
-          <div class="name" data-i18n="manuf_scheme4_en">ECO Mark</div>
-          <div class="desc" data-i18n="manuf_scheme4_desc_en">Voluntary environment-friendly product labelling.</div>
+          <div class="name">ECO Mark</div>
+          <div class="desc">Voluntary environment-friendly product labelling.</div>
         </div>
       </div>
     </div>
@@ -466,148 +397,24 @@
 
   <footer>
     <div>
-      <span data-i18n="footer_text_en">🇮🇳  Bureau of Indian Standards — Standards for Quality, Safety &amp; Trust</span>
+      🇮🇳  Bureau of Indian Standards — Standards for Quality, Safety &amp; Trust
     </div>
     <div class="links">
-      <button data-i18n="footer_about_en">About Us</button>
-      <button data-i18n="footer_privacy_en">Privacy Policy</button>
-      <button data-i18n="footer_contact_en">Contact</button>
+      <button>About Us</button>
+      <button>Privacy Policy</button>
+      <button>Contact</button>
     </div>
   </footer>
 </div>
 
 <script>
-  // ---------- i18n data ----------
-  const i18n = {
-    en: {
-      gov_en: "Government of India",
-      gov_hi: "Government of India",
-      ai_en: "AI Companion",
-      ai_hi: "AI Companion",
-      tab_verify_en: "Verify ISI & Hallmarks",
-      tab_verify_hi: "Verify ISI & Hallmarks",
-      tab_search_en: "IS-Code Search",
-      tab_search_hi: "IS-Code Search",
-      tab_complaints_en: "Consumer Complaints",
-      tab_complaints_hi: "Consumer Complaints",
-      tab_manuf_en: "Manufacturer Help",
-      tab_manuf_hi: "Manufacturer Help",
-      welcome_en: "Welcome to BIS AI Saathi",
-      welcome_hi: "Bureau of Indian Standards AI Saathi",
-      choose_lang_en: "Choose your preferred language to begin",
-      choose_lang_hi: "Choose your preferred language to begin",
-      continue_en: "Continue",
-      continue_hi: "Continue",
-      chat_title_en: "BIS AI Saathi",
-      chat_desc_en: "Ask me anything about BIS services and Indian Standards.",
-      chat_placeholder_en: "Type your message…",
-      search_title_en: "IS-Code Search",
-      search_desc_en: "Describe your product to find the applicable Indian Standard.",
-      search_placeholder_en: "e.g. I manufacture LED bulbs for home use...",
-      verify_title_en: "Verify ISI & Hallmarks",
-      verify_desc_en: "Enter a CM/L license number or 6-digit HUID to verify.",
-      verify_placeholder_en: "e.g. CML-1234567",
-      verify_btn_en: "Verify",
-      verify_valid_title_en: "✅ License appears valid",
-      verify_valid_desc_en: "Product category: Household electrical appliances. Scheme: ISI Mark (Scheme I).",
-      complaints_title_en: "Consumer Complaints",
-      complaints_desc_en: "Tell us about a product quality or certification issue.",
-      complaint_product_en: "Product name",
-      complaint_opt1_en: "Issue type: Counterfeit ISI mark",
-      complaint_opt2_en: "Issue type: Product not meeting standard",
-      complaint_opt3_en: "Issue type: Missing certification",
-      complaint_desc_en: "Describe the issue...",
-      complaint_submit_en: "Submit complaint →",
-      manuf_title_en: "Manufacturer Help",
-      manuf_desc_en: "Select a certification scheme to see the step-by-step process.",
-      manuf_scheme1_en: "ISI Mark (Scheme I)",
-      manuf_scheme1_desc_en: "Mandatory for products under a Quality Control Order.",
-      manuf_scheme2_en: "CRS (Scheme II)",
-      manuf_scheme2_desc_en: "Compulsory registration for electronics & IT products.",
-      manuf_scheme3_en: "FMCS",
-      manuf_scheme3_desc_en: "Foreign Manufacturers Certification Scheme.",
-      manuf_scheme4_en: "ECO Mark",
-      manuf_scheme4_desc_en: "Voluntary environment-friendly product labelling.",
-      footer_text_en: "🇮🇳  Bureau of Indian Standards — Standards for Quality, Safety & Trust",
-      footer_about_en: "About Us",
-      footer_privacy_en: "Privacy Policy",
-      footer_contact_en: "Contact"
-    },
-    hi: {
-      gov_en: "Government of India",
-      gov_hi: "भारत सरकार",
-      ai_en: "AI Companion",
-      ai_hi: "AI साथी",
-      tab_verify_en: "Verify ISI & Hallmarks",
-      tab_verify_hi: "विश्वसनीयता जांच",
-      tab_search_en: "IS-Code Search",
-      tab_search_hi: "मानक खोज",
-      tab_complaints_en: "Consumer Complaints",
-      tab_complaints_hi: "उपभोक्ता शिकायत",
-      tab_manuf_en: "Manufacturer Help",
-      tab_manuf_hi: "उद्योग सहायता",
-      welcome_en: "Welcome to BIS AI Saathi",
-      welcome_hi: "भारतीय मानक ब्यूरो AI साथी",
-      choose_lang_en: "Choose your preferred language to begin",
-      choose_lang_hi: "अपनी पसंदीदा भाषा चुनें",
-      continue_en: "Continue",
-      continue_hi: "आगे बढ़ें",
-      chat_title_en: "BIS AI Saathi",
-      chat_desc_en: "BIS सेवाओं और भारतीय मानकों के बारे में कुछ भी पूछें।",
-      chat_placeholder_en: "अपना संदेश टाइप करें…",
-      search_title_en: "IS-Code Search",
-      search_desc_en: "लागू भारतीय मानक खोजने के लिए अपने उत्पाद का वर्णन करें।",
-      search_placeholder_en: "उदा. मैं घर के उपयोग के लिए LED बल्ब बनाता हूँ...",
-      verify_title_en: "Verify ISI & Hallmarks",
-      verify_desc_en: "सत्यापित करने के लिए CM/L लाइसेंस नंबर या 6-अंकीय HUID दर्ज करें।",
-      verify_placeholder_en: "उदा. CML-1234567",
-      verify_btn_en: "Verify",
-      verify_valid_title_en: "✅ License appears valid",
-      verify_valid_desc_en: "Product category: Household electrical appliances. Scheme: ISI Mark (Scheme I).",
-      complaints_title_en: "Consumer Complaints",
-      complaints_desc_en: "हमें उत्पाद की गुणवत्ता या प्रमाणन समस्या के बारे में बताएं।",
-      complaint_product_en: "उत्पाद का नाम",
-      complaint_opt1_en: "समस्या प्रकार: नकली ISI मार्क",
-      complaint_opt2_en: "समस्या प्रकार: उत्पाद मानक को पूरा नहीं कर रहा",
-      complaint_opt3_en: "समस्या प्रकार: प्रमाणन गायब",
-      complaint_desc_en: "समस्या का वर्णन करें...",
-      complaint_submit_en: "शिकायत जमा करें →",
-      manuf_title_en: "Manufacturer Help",
-      manuf_desc_en: "चरण-दर-चरण प्रक्रिया देखने के लिए एक प्रमाणन योजना चुनें।",
-      manuf_scheme1_en: "ISI Mark (Scheme I)",
-      manuf_scheme1_desc_en: "Quality Control Order के तहत उत्पादों के लिए अनिवार्य।",
-      manuf_scheme2_en: "CRS (Scheme II)",
-      manuf_scheme2_desc_en: "इलेक्ट्रॉनिक्स और IT उत्पादों के लिए अनिवार्य पंजीकरण।",
-      manuf_scheme3_en: "FMCS",
-      manuf_scheme3_desc_en: "विदेशी निर्माता प्रमाणन योजना।",
-      manuf_scheme4_en: "ECO Mark",
-      manuf_scheme4_desc_en: "स्वैच्छिक पर्यावरण-अनुकूल उत्पाद लेबलिंग।",
-      footer_text_en: "🇮🇳  Bureau of Indian Standards — Standards for Quality, Safety & Trust",
-      footer_about_en: "हमारे बारे में",
-      footer_privacy_en: "गोपनीयता नीति",
-      footer_contact_en: "संपर्क"
-    }
-  };
-
   let selectedLanguage = "hi"; // default
   let chatInitialized = false;
 
-  // ---------- Tab switching ----------
-  const tabs = document.querySelectorAll('.tab');
-  const views = document.querySelectorAll('.view');
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const target = tab.getAttribute('data-tab');
-      views.forEach(v => v.classList.remove('show'));
-      document.getElementById('view-' + target).classList.add('show');
-    });
-  });
-
-  function goToTab(name) {
-    document.querySelector('.tab[data-tab="' + name + '"]').click();
+  // ---------- View switching ----------
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('show'));
+    document.getElementById(id).classList.add('show');
   }
 
   // ---------- Language selection ----------
@@ -620,33 +427,14 @@
     });
   });
 
-  // ---------- Apply language to UI ----------
-  function applyLanguage(lang) {
-    const texts = i18n[lang] || i18n.en;
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (texts[key]) el.textContent = texts[key];
-    });
-
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      if (texts[key]) el.setAttribute('placeholder', texts[key]);
-    });
-  }
-
-  // ---------- Continue button -> go to Chat + apply language + intro ----------
+  // ---------- Continue button -> go to Chat + intro ----------
   document.getElementById('continue-btn').addEventListener('click', () => {
-    applyLanguage(selectedLanguage);
-    goToTab('chat');
+    showView('view-chat');
     if (!chatInitialized) {
       initChat();
       chatInitialized = true;
     }
   });
-
-  // Initialize UI in default language
-  applyLanguage(selectedLanguage);
 
   // ---------- System status check ----------
   const API_BASE = "https://bissaathi-api.onrender.com";
@@ -722,12 +510,12 @@
   function handleUserMessage(text) {
     const t = text.toLowerCase();
 
-    // Map keywords to tabs
+    // Map keywords to views
     if (t.includes('1') || t.includes('search') || t.includes('is-') || t.includes('code')) {
       addMsg('assistant', selectedLanguage === 'hi'
         ? "ठीक है, IS-Code Search खोल रहा हूँ। अपना उत्पाद वर्णित करें।"
         : "Opening IS-Code Search. Describe your product.");
-      setTimeout(() => goToTab('search'), 600);
+      setTimeout(() => showView('view-search'), 600);
       return;
     }
 
@@ -735,7 +523,7 @@
       addMsg('assistant', selectedLanguage === 'hi'
         ? "ठीक है, Verify ISI & Hallmarks खोल रहा हूँ।"
         : "Opening Verify ISI & Hallmarks.");
-      setTimeout(() => goToTab('verify'), 600);
+      setTimeout(() => showView('view-verify'), 600);
       return;
     }
 
@@ -743,7 +531,7 @@
       addMsg('assistant', selectedLanguage === 'hi'
         ? "ठीक है, Consumer Complaints खोल रहा हूँ।"
         : "Opening Consumer Complaints.");
-      setTimeout(() => goToTab('complaints'), 600);
+      setTimeout(() => showView('view-complaints'), 600);
       return;
     }
 
@@ -751,7 +539,7 @@
       addMsg('assistant', selectedLanguage === 'hi'
         ? "ठीक है, Manufacturer Help खोल रहा हूँ।"
         : "Opening Manufacturer Help.");
-      setTimeout(() => goToTab('manufacturer'), 600);
+      setTimeout(() => showView('view-manufacturer'), 600);
       return;
     }
 

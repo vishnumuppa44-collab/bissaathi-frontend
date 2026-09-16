@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BIS AI Saathi</title>
+<title>BIS Saathi</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -36,7 +36,7 @@
     border-bottom: 1px solid #e5e7eb;
     gap: 12px;
   }
-  .gov {
+  .brand {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -52,12 +52,11 @@
     object-fit: contain;
     padding: 4px;
   }
-  .gov-text, .ai-text { line-height: 1.25; }
-  .gov-text .en, .ai-text .en { font-size: 14px; font-weight: 600; color: #111827; }
-  .gov-text .hi, .ai-text .hi { font-size: 14px; color: #4b5563; }
-  .ai-companion { display: flex; align-items: center; gap: 8px; }
-  .ai-text { text-align: right; }
-  .sparkle { color: #f59e0b; font-size: 18px; }
+  .brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+  }
 
   .system-status {
     font-size: 11px;
@@ -252,35 +251,25 @@
 
 <div class="app">
   <header>
-    <div class="gov">
+    <div class="brand">
       <!-- Official BIS logo -->
       <img
         class="emblem"
         src="https://bis.gov.in/wp-content/themes/bis/images/logo.png"
         alt="Bureau of Indian Standards Logo"
       />
-      <div class="gov-text">
-        <div class="en">Government of India</div>
-        <div class="hi">भारत सरकार</div>
-      </div>
+      <div class="brand-name">BIS Saathi</div>
     </div>
 
-    <div class="ai-companion">
-      <span class="sparkle">✨</span>
-      <div class="ai-text">
-        <div class="en">AI Companion</div>
-        <div class="hi">AI साथी</div>
-      </div>
-      <!-- System status badge -->
-      <div id="system-status" class="system-status">Checking…</div>
-    </div>
+    <!-- System status badge -->
+    <div id="system-status" class="system-status">Checking…</div>
   </header>
 
   <main>
     <!-- Language Selector -->
     <div class="view show" id="view-language">
       <div class="lang-heading">
-        <h1>Welcome to BIS AI Saathi</h1>
+        <h1>Welcome to BIS Saathi</h1>
         <h2>भारतीय मानक ब्यूरो AI साथी</h2>
         <p>Choose your preferred language to begin</p>
         <p>अपनी पसंदीदा भाषा चुनें</p>
@@ -306,7 +295,7 @@
     <!-- Chat / Home -->
     <div class="view" id="view-chat" style="max-width: 640px;">
       <div class="section-title">
-        <h3>BIS AI Saathi</h3>
+        <h3>BIS Saathi</h3>
         <p>Ask me anything about BIS services and Indian Standards.</p>
       </div>
       <div class="chat-box" id="chat-box">
@@ -472,7 +461,7 @@
   function getBotIntro() {
     if (selectedLanguage === 'hi') {
       return [
-        "नमस्ते! मैं BIS AI साथी हूँ।",
+        "नमस्ते! मैं BIS Saathi हूँ।",
         "मैं आपको BIS सेवाओं और भारतीय मानकों के बारे में मदद कर सकता हूँ।",
         "बताइए, आप कौन सी सेवा चाहते हैं?",
         "1. IS-Code Search",
@@ -482,7 +471,7 @@
       ];
     }
     return [
-      "Namaste! I am BIS AI Saathi.",
+      "Namaste! I am BIS Saathi.",
       "I can help you with BIS services and Indian Standards.",
       "Which service would you like?",
       "1. IS-Code Search",

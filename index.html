@@ -44,12 +44,12 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #1e3a8a;
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    font-size: 18px;
+    object-fit: contain;
+    padding: 4px;
   }
   .gov-text, .ai-text { line-height: 1.25; }
   .gov-text .en, .ai-text .en { font-size: 14px; font-weight: 600; color: #111827; }
@@ -272,7 +272,12 @@
 <div class="app">
   <header>
     <div class="gov">
-      <div class="emblem">🏛️</div>
+      <!-- Official BIS logo -->
+      <img
+        class="emblem"
+        src="https://bis.gov.in/wp-content/themes/bis/images/logo.png"
+        alt="Bureau of Indian Standards Logo"
+      />
       <div class="gov-text">
         <div class="en">Government of India</div>
         <div class="hi">भारत सरकार</div>

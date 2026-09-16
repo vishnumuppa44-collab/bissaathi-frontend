@@ -175,10 +175,33 @@
     flex-direction: column;
     gap: 10px;
   }
-  .msg { max-width: 75%; padding: 10px 14px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; }
+  .msg { max-width: 75%; padding: 10px 14px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; white-space: pre-wrap; }
   .msg.assistant { align-self: flex-start; background: #fff; border: 1px solid #e5e7eb; color: #1f2937; }
   .msg.user { align-self: flex-end; background: #1e3a8a; color: #fff; }
   .citation { margin-top: 6px; font-size: 11.5px; color: #1d4ed8; display: flex; align-items: center; gap: 4px; }
+
+  /* Quick-reply chips (the 1-4 service options) */
+  .quick-replies {
+    align-self: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 90%;
+  }
+  .quick-reply-btn {
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    color: #1e3a8a;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .quick-reply-btn:hover { background: #dbeafe; border-color: #93c5fd; }
+  .quick-reply-btn:disabled { opacity: 0.5; cursor: default; }
 
   .chat-input-row { margin-top: 12px; display: flex; gap: 8px; }
   .chat-input-row input {
@@ -206,6 +229,7 @@
   .verify-btn { border: none; background: #1e3a8a; color: #fff; border-radius: 8px; padding: 0 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
   .verify-btn:hover { background: #1e3175; }
   .result-box { margin-top: 16px; border: 1px solid #bbf7d0; background: #f0fdf4; border-radius: 10px; padding: 14px; font-size: 13.5px; color: #14532d; }
+  .result-box.warn { border-color: #fde68a; background: #fffbeb; color: #92400e; }
   .result-box .title { font-weight: 600; }
 
   /* Forms */
@@ -226,8 +250,19 @@
     border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; text-align: left; background: #fff; cursor: pointer;
   }
   .scheme-card:hover { border-color: #93c5fd; background: #eff6ff; }
+  .scheme-card.selected { border-color: #1e3a8a; background: #eff6ff; box-shadow: 0 0 0 2px rgba(30,58,138,0.12); }
   .scheme-card .name { font-weight: 600; color: #111827; font-size: 14px; }
   .scheme-card .desc { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+  .scheme-detail {
+    margin-top: 16px;
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .scheme-detail .title { font-weight: 600; color: #111827; font-size: 14px; margin-bottom: 8px; }
+  .scheme-detail ol { margin: 0; padding-left: 18px; font-size: 13px; color: #1f2937; line-height: 1.7; }
 
   /* Footer */
   footer {
@@ -245,6 +280,24 @@
     background: none; border: none; color: #6b7280; font-size: 12px; cursor: pointer; margin-left: 14px; padding: 0;
   }
   footer a:hover, footer .links button:hover { color: #111827; }
+
+  /* Modal (About Us / Privacy Policy / Contact) */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(17, 24, 39, 0.5);
+    align-items: center; justify-content: center;
+    padding: 20px; z-index: 50;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: #fff; border-radius: 14px; max-width: 420px; width: 100%;
+    padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .modal-header span { font-weight: 700; font-size: 16px; color: #111827; }
+  .modal-close { border: none; background: none; font-size: 16px; cursor: pointer; color: #6b7280; }
+  .modal-body { font-size: 13.5px; color: #374151; line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -314,7 +367,7 @@
         <p>Describe your product to find the applicable Indian Standard.</p>
       </div>
       <div class="chat-box" id="search-chat-box">
-        <!-- Can be used later for real API chat -->
+        <!-- Search results appear here -->
       </div>
       <div class="chat-input-row">
         <input type="text" id="search-input" placeholder="e.g. I manufacture LED bulbs for home use..." />
@@ -345,13 +398,13 @@
         <p>Tell us about a product quality or certification issue.</p>
       </div>
       <div class="form-stack" id="complaint-form">
-        <input type="text" placeholder="Product name" />
-        <select>
+        <input type="text" id="complaint-product" placeholder="Product name" />
+        <select id="complaint-issue">
           <option>Issue type: Counterfeit ISI mark</option>
           <option>Issue type: Product not meeting standard</option>
           <option>Issue type: Missing certification</option>
         </select>
-        <textarea rows="3" placeholder="Describe the issue..."></textarea>
+        <textarea id="complaint-desc" rows="3" placeholder="Describe the issue..."></textarea>
         <button class="submit-btn" id="complaint-submit">Submit complaint →</button>
       </div>
       <div class="result-box" id="complaint-result" style="display:none;"></div>
@@ -363,24 +416,25 @@
         <h3>Manufacturer Help</h3>
         <p>Select a certification scheme to see the step-by-step process.</p>
       </div>
-      <div class="scheme-grid">
-        <div class="scheme-card">
+      <div class="scheme-grid" id="scheme-grid">
+        <div class="scheme-card" data-scheme="ISI Mark (Scheme I)">
           <div class="name">ISI Mark (Scheme I)</div>
           <div class="desc">Mandatory for products under a Quality Control Order.</div>
         </div>
-        <div class="scheme-card">
+        <div class="scheme-card" data-scheme="CRS (Scheme II)">
           <div class="name">CRS (Scheme II)</div>
           <div class="desc">Compulsory registration for electronics &amp; IT products.</div>
         </div>
-        <div class="scheme-card">
+        <div class="scheme-card" data-scheme="FMCS">
           <div class="name">FMCS</div>
           <div class="desc">Foreign Manufacturers Certification Scheme.</div>
         </div>
-        <div class="scheme-card">
+        <div class="scheme-card" data-scheme="ECO Mark">
           <div class="name">ECO Mark</div>
           <div class="desc">Voluntary environment-friendly product labelling.</div>
         </div>
       </div>
+      <div class="scheme-detail" id="scheme-detail" style="display:none;"></div>
     </div>
   </main>
 
@@ -389,11 +443,22 @@
       🇮🇳  Bureau of Indian Standards — Standards for Quality, Safety &amp; Trust
     </div>
     <div class="links">
-      <button>About Us</button>
-      <button>Privacy Policy</button>
-      <button>Contact</button>
+      <button id="footer-about">About Us</button>
+      <button id="footer-privacy">Privacy Policy</button>
+      <button id="footer-contact">Contact</button>
     </div>
   </footer>
+</div>
+
+<!-- About Us / Privacy Policy / Contact modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span id="modal-title"></span>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
 </div>
 
 <script>
@@ -458,77 +523,116 @@
   const chatBox = document.getElementById('chat-box');
   const chatInput = document.getElementById('chat-input');
 
-  function getBotIntro() {
+  // Central place describing each of the 4 services, keyed the same way
+  // whether the user types "1"/"search"/etc. or clicks a quick-reply chip.
+  const serviceMap = {
+    search: {
+      view: 'view-search',
+      label: { hi: 'IS-Code Search', en: 'IS-Code Search' },
+      hi: 'ठीक है, IS-Code Search खोल रहा हूँ। अपना उत्पाद वर्णित करें।',
+      en: 'Opening IS-Code Search. Describe your product.'
+    },
+    verify: {
+      view: 'view-verify',
+      label: { hi: 'Verify ISI & Hallmarks', en: 'Verify ISI & Hallmarks' },
+      hi: 'ठीक है, Verify ISI & Hallmarks खोल रहा हूँ।',
+      en: 'Opening Verify ISI & Hallmarks.'
+    },
+    complaints: {
+      view: 'view-complaints',
+      label: { hi: 'Consumer Complaints', en: 'Consumer Complaints' },
+      hi: 'ठीक है, Consumer Complaints खोल रहा हूँ।',
+      en: 'Opening Consumer Complaints.'
+    },
+    manufacturer: {
+      view: 'view-manufacturer',
+      label: { hi: 'Manufacturer Help', en: 'Manufacturer Help' },
+      hi: 'ठीक है, Manufacturer Help खोल रहा हूँ।',
+      en: 'Opening Manufacturer Help.'
+    }
+  };
+
+  function openService(key) {
+    const svc = serviceMap[key];
+    if (!svc) return;
+    addMsg('assistant', selectedLanguage === 'hi' ? svc.hi : svc.en);
+    setTimeout(() => showView(svc.view), 600);
+  }
+
+  function getBotIntroLines() {
     if (selectedLanguage === 'hi') {
       return [
         "नमस्ते! मैं BIS Saathi हूँ।",
         "मैं आपको BIS सेवाओं और भारतीय मानकों के बारे में मदद कर सकता हूँ।",
-        "बताइए, आप कौन सी सेवा चाहते हैं?",
-        "1. IS-Code Search",
-        "2. Verify ISI & Hallmarks",
-        "3. Consumer Complaints",
-        "4. Manufacturer Help"
+        "बताइए, आप कौन सी सेवा चाहते हैं?"
       ];
     }
     return [
       "Namaste! I am BIS Saathi.",
       "I can help you with BIS services and Indian Standards.",
-      "Which service would you like?",
-      "1. IS-Code Search",
-      "2. Verify ISI & Hallmarks",
-      "3. Consumer Complaints",
-      "4. Manufacturer Help"
+      "Which service would you like?"
     ];
   }
 
   function initChat() {
-    const lines = getBotIntro();
+    chatBox.innerHTML = '';
+    const lines = getBotIntroLines();
     lines.forEach((line, idx) => {
       setTimeout(() => addMsg('assistant', line), idx * 250);
     });
+    setTimeout(renderQuickReplies, lines.length * 250);
   }
 
-  function addMsg(role, text) {
+  function addMsg(role, text, container) {
+    const box = container || chatBox;
     const div = document.createElement('div');
     div.className = 'msg ' + role;
     div.textContent = text;
-    chatBox.appendChild(div);
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+    return div;
+  }
+
+  // Renders the "1. IS-Code Search / 2. Verify ISI & Hallmarks / ..." options
+  // as real clickable chips instead of plain, unclickable text lines.
+  function renderQuickReplies() {
+    const wrap = document.createElement('div');
+    wrap.className = 'quick-replies';
+
+    Object.keys(serviceMap).forEach((key, idx) => {
+      const svc = serviceMap[key];
+      const btn = document.createElement('button');
+      btn.className = 'quick-reply-btn';
+      btn.textContent = (idx + 1) + '. ' + (selectedLanguage === 'hi' ? svc.label.hi : svc.label.en);
+      btn.addEventListener('click', () => {
+        Array.from(wrap.querySelectorAll('button')).forEach(b => b.disabled = true);
+        addMsg('user', btn.textContent);
+        setTimeout(() => openService(key), 300);
+      });
+      wrap.appendChild(btn);
+    });
+
+    chatBox.appendChild(wrap);
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
   function handleUserMessage(text) {
-    const t = text.toLowerCase();
+    const t = text.toLowerCase().trim();
 
-    // Map keywords to views
-    if (t.includes('1') || t.includes('search') || t.includes('is-') || t.includes('code')) {
-      addMsg('assistant', selectedLanguage === 'hi'
-        ? "ठीक है, IS-Code Search खोल रहा हूँ। अपना उत्पाद वर्णित करें।"
-        : "Opening IS-Code Search. Describe your product.");
-      setTimeout(() => showView('view-search'), 600);
+    if (t === '1' || t.includes('search') || t.includes('is-') || t.includes('is code') || t.includes('code')) {
+      openService('search');
       return;
     }
-
-    if (t.includes('2') || t.includes('verify') || t.includes('hallmark') || t.includes('isi')) {
-      addMsg('assistant', selectedLanguage === 'hi'
-        ? "ठीक है, Verify ISI & Hallmarks खोल रहा हूँ।"
-        : "Opening Verify ISI & Hallmarks.");
-      setTimeout(() => showView('view-verify'), 600);
+    if (t === '2' || t.includes('verify') || t.includes('hallmark') || t.includes('isi')) {
+      openService('verify');
       return;
     }
-
-    if (t.includes('3') || t.includes('complaint') || t.includes('consumer')) {
-      addMsg('assistant', selectedLanguage === 'hi'
-        ? "ठीक है, Consumer Complaints खोल रहा हूँ।"
-        : "Opening Consumer Complaints.");
-      setTimeout(() => showView('view-complaints'), 600);
+    if (t === '3' || t.includes('complaint') || t.includes('consumer')) {
+      openService('complaints');
       return;
     }
-
-    if (t.includes('4') || t.includes('manufacturer') || t.includes('help')) {
-      addMsg('assistant', selectedLanguage === 'hi'
-        ? "ठीक है, Manufacturer Help खोल रहा हूँ।"
-        : "Opening Manufacturer Help.");
-      setTimeout(() => showView('view-manufacturer'), 600);
+    if (t === '4' || t.includes('manufacturer') || t.includes('help')) {
+      openService('manufacturer');
       return;
     }
 
@@ -557,6 +661,58 @@
     if (e.key === 'Enter') sendChat();
   });
 
+  // ---------- IS-Code Search (previously had no handler at all) ----------
+  const searchBox = document.getElementById('search-chat-box');
+  const searchInput = document.getElementById('search-input');
+
+  // Small illustrative keyword -> Indian Standard lookup table.
+  const isCodeDB = [
+    { keywords: ['led', 'bulb', 'light'], code: 'IS 16102 (Part 2)', title: 'LED Lamps — Performance Requirements', category: 'Electrical & Lighting' },
+    { keywords: ['helmet'], code: 'IS 4151', title: 'Protective Helmets for Two-Wheeler Riders', category: 'Safety Equipment' },
+    { keywords: ['cement'], code: 'IS 269', title: 'Ordinary Portland Cement — Specification', category: 'Construction Materials' },
+    { keywords: ['water', 'drinking water', 'bottle'], code: 'IS 14543', title: 'Packaged Drinking Water — Specification', category: 'Food & Beverage' },
+    { keywords: ['toy'], code: 'IS 9873', title: 'Safety of Toys', category: 'Consumer Products' },
+    { keywords: ['cable', 'wire'], code: 'IS 694', title: 'PVC Insulated Cables for Electrical Wiring', category: 'Electrical & Lighting' },
+    { keywords: ['pressure cooker', 'cooker'], code: 'IS 2347', title: 'Aluminium Pressure Cookers', category: 'Household Appliances' },
+    { keywords: ['footwear', 'shoe'], code: 'IS 15298', title: 'Footwear — General Requirements', category: 'Consumer Products' },
+    { keywords: ['switch', 'socket', 'plug'], code: 'IS 3854', title: 'Switches for Household Electrical Installations', category: 'Electrical & Lighting' },
+    { keywords: ['steel', 'tmt', 'bar'], code: 'IS 1786', title: 'High Strength Deformed Steel Bars (TMT)', category: 'Construction Materials' }
+  ];
+
+  function findIsCode(text) {
+    const t = text.toLowerCase();
+    return isCodeDB.find(entry => entry.keywords.some(k => t.includes(k)));
+  }
+
+  function sendSearch() {
+    const val = searchInput.value.trim();
+    if (!val) return;
+
+    addMsg('user', val, searchBox);
+    searchInput.value = '';
+
+    setTimeout(() => {
+      const match = findIsCode(val);
+      if (match) {
+        addMsg('assistant',
+          'Applicable Indian Standard: ' + match.code + '\n' +
+          match.title + '\n' +
+          'Category: ' + match.category + '\n\n' +
+          'This is an illustrative match — confirm the exact standard with your nearest BIS branch office or at bis.gov.in.',
+          searchBox);
+      } else {
+        addMsg('assistant',
+          "I couldn't find an exact match. Try a more specific keyword (e.g. 'LED bulb', 'helmet', 'cement', 'drinking water bottle'), or check the full product list at bis.gov.in.",
+          searchBox);
+      }
+    }, 400);
+  }
+
+  document.getElementById('search-send').addEventListener('click', sendSearch);
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendSearch();
+  });
+
   // ---------- Verify demo ----------
   document.getElementById('verify-btn').addEventListener('click', () => {
     const val = document.getElementById('verify-input').value.trim();
@@ -570,6 +726,91 @@
     const result = document.getElementById('complaint-result');
     result.innerHTML = '<div class="title">✅ Complaint submitted</div><div style="margin-top:4px; color:#166534;">Tracking ID: ' + trackId + '</div>';
     result.style.display = 'block';
+  });
+
+  // ---------- Manufacturer Help scheme cards (previously had no handler at all) ----------
+  const schemeSteps = {
+    'ISI Mark (Scheme I)': [
+      'Identify the applicable Indian Standard for your product.',
+      'Apply to the nearest BIS branch office with your application and test reports.',
+      'BIS reviews the documents and schedules a factory audit.',
+      'Samples are tested at a BIS-recognised or in-house lab.',
+      'On successful audit and testing, a licence to use the ISI mark is granted.'
+    ],
+    'CRS (Scheme II)': [
+      'Check if your electronics/IT product falls under the Compulsory Registration Order.',
+      'Get the product tested at a BIS-recognised lab.',
+      'Submit a registration application online via the BIS CRS portal.',
+      'BIS reviews the test report and application.',
+      'On approval, register and affix the Standard Mark before sale.'
+    ],
+    'FMCS': [
+      'Confirm your product category is covered under the Foreign Manufacturers Certification Scheme.',
+      'Submit an application along with test reports from a BIS-recognised lab.',
+      'BIS may conduct a factory inspection at the overseas manufacturing unit.',
+      'On successful review, a licence is granted to the foreign manufacturer.',
+      'Renew the licence periodically as per BIS guidelines.'
+    ],
+    'ECO Mark': [
+      'Check the specific Indian Standard and environmental criteria for your product category.',
+      'Apply to BIS with product and environmental test reports.',
+      'BIS verifies compliance with the environment-friendliness criteria.',
+      'On approval, a licence to use the ECO Mark is granted alongside the applicable quality standard.'
+    ]
+  };
+
+  document.querySelectorAll('.scheme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.scheme-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+
+      const name = card.getAttribute('data-scheme');
+      const steps = schemeSteps[name] || [];
+      const detail = document.getElementById('scheme-detail');
+      detail.innerHTML =
+        '<div class="title">' + name + ' — Step-by-step process</div>' +
+        '<ol>' + steps.map(s => '<li>' + s + '</li>').join('') + '</ol>';
+      detail.style.display = 'block';
+    });
+  });
+
+  // ---------- Footer links (previously had no handler at all) ----------
+  const modalContent = {
+    about: {
+      title: 'About Us',
+      body: 'BIS Saathi is a demo assistant built for the Bureau of Indian Standards to help manufacturers and consumers navigate BIS certification, IS codes, and consumer complaints in their preferred language.'
+    },
+    privacy: {
+      title: 'Privacy Policy',
+      body: 'This is a prototype application. No personal data entered here is stored or shared with third parties. For the official BIS privacy policy, visit bis.gov.in.'
+    },
+    contact: {
+      title: 'Contact',
+      body: 'For official BIS queries, contact the BIS Care helpline or visit your nearest BIS branch office. Website: bis.gov.in'
+    }
+  };
+
+  const modalOverlay = document.getElementById('modal-overlay');
+
+  function openModal(key) {
+    const c = modalContent[key];
+    document.getElementById('modal-title').textContent = c.title;
+    document.getElementById('modal-body').textContent = c.body;
+    modalOverlay.classList.add('show');
+  }
+  function closeModal() {
+    modalOverlay.classList.remove('show');
+  }
+
+  document.getElementById('footer-about').addEventListener('click', () => openModal('about'));
+  document.getElementById('footer-privacy').addEventListener('click', () => openModal('privacy'));
+  document.getElementById('footer-contact').addEventListener('click', () => openModal('contact'));
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => {
+    if (e.target.id === 'modal-overlay') closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
   });
 </script>
 

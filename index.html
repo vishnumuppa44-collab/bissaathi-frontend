@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>BIS Saathi</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&display=swap" rel="stylesheet">
 <style>
@@ -93,108 +92,15 @@ h2{
 .welcome-mark{
   color:#2370d5;font-size:42px;vertical-align:8px;margin:0 8px;
 }
-.hindi-title{
-  font-size:31px;font-weight:700;margin-top:4px;
-  color:#173665;
-}
-.ai{
-  color:#1767d7;
-  position:relative;
-}
-.ai:after{
-  content:"";position:absolute;left:5px;right:-5px;bottom:-6px;height:5px;
-  border-radius:5px;
-  background:linear-gradient(90deg,#f48100 0 55%,#138b50 55% 100%);
-}
-.sub{font-size:18px;color:#526b8d;margin-top:22px}
-.sub-hi{font-size:17px;color:#667b98;margin-top:7px}
-.languages{
-  width:min(900px,100%);
-  margin:31px auto 0;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:15px;
-}
-.lang{
-  min-height:145px;padding:20px 10px;
-  border-radius:20px;
-  border:1.5px solid rgba(35,90,160,.18);
-  background:rgba(255,255,255,.74);
-  box-shadow:0 9px 22px rgba(36,75,125,.07);
-  cursor:pointer;transition:.2s;
-  position:relative;
-}
-.lang:hover{transform:translateY(-4px);box-shadow:0 15px 28px rgba(36,75,125,.13)}
-.lang.selected{
-  border:2px solid var(--orange);
-  background:linear-gradient(145deg,#fffdf8,#fff4e4);
-  box-shadow:0 12px 26px rgba(255,132,0,.15);
-}
-.check{
-  position:absolute;right:10px;top:10px;
-  width:27px;height:27px;border-radius:50%;
-  display:none;place-items:center;
-  background:#ff8500;color:white;font-weight:900;
-}
-.selected .check{display:grid}
-.lang-icon{
-  height:38px;font-size:31px;line-height:38px;
-  color:#2474d9;margin-bottom:10px;
-}
-.lang:nth-child(2) .lang-icon{color:#ff8500;font-size:37px}
-.lang:nth-child(3) .lang-icon{color:#654bc7}
-.lang:nth-child(4) .lang-icon{color:#2c9a68}
-.lang:nth-child(5) .lang-icon{color:#e65b8b}
-.lang:nth-child(6) .lang-icon{color:#1e9ed0}
-.lang:nth-child(7) .lang-icon{color:#7855cf}
-.lang:nth-child(8) .lang-icon{color:#ee8411}
-.lang strong{display:block;font-size:20px;color:#102f68}
-.lang small{display:block;margin-top:5px;font-size:14px;color:#60718c}
-.action{
-  width:min(900px,100%);margin:28px auto 0;
-  padding:11px;display:flex;gap:10px;
-  border-radius:18px;background:rgba(255,255,255,.82);
-  box-shadow:0 8px 24px rgba(25,65,120,.09);
-}
-.continue{
-  flex:1;border:0;border-radius:12px;
-  padding:14px;background:linear-gradient(90deg,#1767d7,#273fa6);
-  color:#fff;font-size:17px;font-weight:700;cursor:pointer;
-  box-shadow:0 7px 16px rgba(28,73,170,.28);
-}
-.continue:hover{filter:brightness(1.05);transform:translateY(-1px)}
-.edit{
-  width:57px;border:1px solid #dce4ef;border-radius:12px;
-  background:#fff;font-size:24px;color:#172d52;cursor:pointer;
-}
-.scene{
-  position:fixed;left:0;right:0;bottom:68px;height:210px;
-  pointer-events:none;z-index:0;
-}
-.landmark{
-  position:absolute;bottom:0;color:#d99b68;opacity:.24;
-}
+
+
 .gate{left:4%;font-size:115px}
 .parliament{right:5%;font-size:105px}
 .tree{position:absolute;bottom:-2px;font-size:105px;opacity:.32}
 .tree.one{left:0}.tree.two{left:9%;font-size:80px}.tree.three{right:11%;font-size:80px}.tree.four{right:0}
 .flag{position:absolute;right:1.5%;bottom:70px;font-size:70px;opacity:.9}
-footer{
-  position:relative;z-index:3;
-  min-height:68px;padding:18px 38px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,.82);
-  border-top:1px solid rgba(20,50,100,.1);
-  color:#536a8a;font-size:14px;
-}
-footer nav{display:flex;gap:27px}
-footer a{color:#536a8a;text-decoration:none}
-footer a:hover{color:#1767d7}
-@media(max-width:800px){
-  header{padding:0 18px}.brand-line{display:none}.brand h1{font-size:23px}
-  .status{padding:8px 12px;font-size:13px}
-  h2{font-size:36px}.hindi-title{font-size:25px}
-  .languages{grid-template-columns:repeat(2,1fr)}
-  footer{flex-direction:column;gap:12px;text-align:center}
-}
+
+
 @media(max-width:480px){
   h2{font-size:30px}.welcome-mark{font-size:26px}
   .languages{gap:10px}.lang{min-height:125px}

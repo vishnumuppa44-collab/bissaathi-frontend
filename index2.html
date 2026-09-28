@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>BIS Saathi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="background.css" />
+
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <img
+        class="bis-logo-img"
+        src="https://www.bis.gov.in/wp-content/uploads/2024/12/BIS-LOGO.png"
+        alt="Bureau of Indian Standards logo"
+      />
+
+      <div class="brand-line"></div>
+
+      <div>
+        <h1>BIS Saathi</h1>
+        <p>मानक • सुरक्षा • विश्वास</p>
+      </div>
+    </div>
+
+    <div id="system-status" class="system-status">
+      Demo mode
+    </div>
+  </header>
+
+  <!-- Main app -->
+  <main>
+    <!-- Language selection -->
+    <section class="view show" id="view-language">
+      <div class="lang-hero">
+        <div class="lang-content">
+          <div class="lang-heading">
+            <h1>
+              <span class="spark">✦</span>
+              Welcome to BIS Saathi
+              <span class="spark">✦</span>
+            </h1>
+
+            <h2>
+              भारतीय मानक ब्यूरो
+              <span class="ai-word">AI</span>
+              साथी
+            </h2>
+
+            <p>Choose your preferred language to begin</p>
+            <p>
+              <span class="dash">–</span>
+              अपनी पसंदीदा भाषा चुनें
+              <span class="dash">–</span>
+            </p>
+          </div>
+
+          <div class="lang-grid" id="lang-grid">
+            <button class="lang-card" data-lang="en" type="button">
+              <span class="card-icon">🌐</span>
+              <span class="native">English</span>
+            </button>
+
+            <button class="lang-card selected" data-lang="hi" type="button">
+              <span class="card-icon hindi-icon">अ</span>
+              <span class="native">हिन्दी</span>
+              <span class="english">(Hindi)</span>
+            </button>
+
+            <button class="lang-card" data-lang="ta" type="button">
+              <span class="card-icon">🛕</span>
+              <span class="native">தமிழ்</span>
+              <span class="english">(Tamil)</span>
+            </button>
+
+            <button class="lang-card" data-lang="bn" type="button">
+              <span class="card-icon">🍃</span>
+              <span class="native">বাংলা</span>
+              <span class="english">(Bengali)</span>
+            </button>
+
+            <button class="lang-card" data-lang="te" type="button">
+              <span class="card-icon">🌺</span>
+              <span class="native">తెలుగు</span>
+              <span class="english">(Telugu)</span>
+            </button>
+
+            <button class="lang-card" data-lang="mr" type="button">
+              <span class="card-icon">🏛️</span>
+              <span class="native">मराठी</span>
+              <span class="english">(Marathi)</span>
+            </button>
+
+            <button class="lang-card" data-lang="gu" type="button">
+              <span class="card-icon">🌸</span>
+              <span class="native">ગુજરાતી</span>
+              <span class="english">(Gujarati)</span>
+            </button>
+
+            <button class="lang-card" data-lang="kn" type="button">
+              <span class="card-icon">🪔</span>
+              <span class="native">ಕನ್ನಡ</span>
+              <span class="english">(Kannada)</span>
+            </button>
+          </div>
+
+          <div class="action-row">
+            <button class="continue-btn" id="continue-btn" type="button">
+              <span>
+                <span class="btn-sparkle">✨</span>
+                Continue
+                <span class="sub" id="continue-sub">/ आगे बढ़ें</span>
+              </span>
+
+              <span class="btn-arrow">→</span>
+            </button>
+
+            <button
+              class="mic-btn"
+              id="mic-btn"
+              type="button"
+              title="Voice input is not connected yet"
+            >
+              🎤
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat screen -->
+    <section class="view content-view" id="view-chat">
+      <button class="back-btn" type="button" data-back="view-language">
+        ← Change language
+      </button>
+
+      <div class="section-title">
+        <h3>BIS Saathi</h3>
+        <p>Ask me about BIS services and Indian Standards.</p>
+      </div>
+
+      <div class="chat-box" id="chat-box"></div>
+
+      <div class="chat-input-row">
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Type your message..."
+          autocomplete="off"
+        />
+
+        <button class="send-btn" id="chat-send" type="button">
+          ➤
+        </button>
+      </div>
+    </section>
+
+    <!-- IS code search -->
+    <section class="view content-view" id="view-search">
+      <button class="back-btn" type="button" data-back="view-chat">
+        ← Back to chat
+      </button>
+
+      <div class="section-title">
+        <h3>IS-Code Search</h3>
+        <p>Describe your product to find an illustrative Indian Standard match.</p>
+      </div>
+
+      <div class="chat-box" id="search-chat-box">
+        <div class="msg assistant">
+          Enter a product name, for example: LED bulb, helmet, cement, cable, toy, or pressure cooker.
+        </div>
+      </div>
+
+      <div class="chat-input-row">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Example: I manufacture LED bulbs..."
+          autocomplete="off"
+        />
+
+        <button class="send-btn" id="search-send" type="button">
+          ➤
+        </button>
+      </div>
+    </section>
+
+    <!-- Verify section -->
+    <section class="view content-view small-view" id="view-verify">
+      <button class="back-btn" type="button" data-back="view-chat">
+        ← Back to chat
+      </button>
+
+      <div class="section-title">
+        <h3>Verify ISI &amp; Hallmarks</h3>
+        <p>Enter a CM/L licence number or 6-digit HUID.</p>
+      </div>
+
+      <div class="verify-row">
+        <input
+          type="text"
+          id="verify-input"
+          placeholder="Example: CML-1234567"
+          autocomplete="off"
+        />
+
+        <button class="verify-btn" id="verify-btn" type="button">
+          Verify
+        </button>
+      </div>
+
+      <div class="result-box" id="verify-result"></div>
+    </section>
+
+    <!-- Complaints section -->
+    <section class="view content-view small-view" id="view-complaints">
+      <button class="back-btn" type="button" data-back="view-chat">
+        ← Back to chat
+      </button>
+
+      <div class="section-title">
+        <h3>Consumer Complaints</h3>
+        <p>Tell us about a product quality or certification issue.</p>
+      </div>
+
+      <form class="form-stack" id="complaint-form">
+        <input
+          type="text"
+          id="complaint-product"
+          placeholder="Product name"
+          required
+        />
+
+        <select id="complaint-issue">
+          <option value="Counterfeit ISI mark">
+            Counterfeit ISI mark
+          </option>
+
+          <option value="Product not meeting standard">
+            Product not meeting standard
+          </option>
+
+          <option value="Missing certification">
+            Missing certification
+          </option>
+
+          <option value="Other issue">
+            Other issue
+          </option>
+        </select>
+
+        <textarea
+          id="complaint-desc"
+          rows="4"
+          placeholder="Describe the issue..."
+          required
+        ></textarea>
+
+        <button class="submit-btn" type="submit">
+          Submit complaint →
+        </button>
+      </form>
+
+      <div class="result-box" id="complaint-result"></div>
+    </section>
+
+    <!-- Manufacturer help -->
+    <section class="view content-view" id="view-manufacturer">
+      <button class="back-btn" type="button" data-back="view-chat">
+        ← Back to chat
+      </button>
+
+      <div class="section-title">
+        <h3>Manufacturer Help</h3>
+        <p>Select a certification scheme to see an illustrative process.</p>
+      </div>
+
+      <div class="scheme-grid">
+        <button
+          class="scheme-card"
+          data-scheme="ISI Mark (Scheme I)"
+          type="button"
+        >
+          <span class="name">ISI Mark (Scheme I)</span>
+          <span class="desc">
+            Mandatory for products under a Quality Control Order.
+          </span>
+        </button>
+
+        <button
+          class="scheme-card"
+          data-scheme="CRS (Scheme II)"
+          type="button"
+        >
+          <span class="name">CRS (Scheme II)</span>
+          <span class="desc">
+            Compulsory registration for electronics and IT products.
+          </span>
+        </button>
+
+        <button class="scheme-card" data-scheme="FMCS" type="button">
+          <span class="name">FMCS</span>
+          <span class="desc">
+            Foreign Manufacturers Certification Scheme.
+          </span>
+        </button>
+
+        <button class="scheme-card" data-scheme="ECO Mark" type="button">
+          <span class="name">ECO Mark</span>
+          <span class="desc">
+            Voluntary environment-friendly product labelling.
+          </span>
+        </button>
+      </div>
+
+      <div class="scheme-detail" id="scheme-detail"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      🇮🇳 Bureau of Indian Standards — Standards for Quality, Safety &amp; Trust
+    </div>
+
+    <div class="links">
+      <button id="footer-about" type="button">About Us</button>
+      <button id="footer-privacy" type="button">Privacy Policy</button>
+      <button id="footer-contact" type="button">Contact</button>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h4 id="modal-title">Information</h4>
+        <button class="modal-close" id="modal-close" type="button">
+          ✕
+        </button>
+      </div>
+
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+</body>
+</html>

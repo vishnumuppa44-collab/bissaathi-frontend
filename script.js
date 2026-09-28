@@ -5,7 +5,8 @@
    ========================================================= */
 
 let selectedLanguage = "hi";
-let chatInitialized = false;
+let chatLanguage = null;      // language the chat was last initialised in
+let chatRunId = 0;            // lets us cancel stale greeting timeouts
 
 
 /* =========================================================
@@ -181,6 +182,8 @@ const serviceMap = {
   }
 };
 
+// Whole-word matching is used for these, so "led" no longer matches
+// "installed", "bar" no longer matches "barrier", and so on.
 const isCodeDB = [
   {
     keywords: ["led", "bulb", "light", "lamp"],
@@ -207,7 +210,7 @@ const isCodeDB = [
     category: "Food and Beverage"
   },
   {
-    keywords: ["toy", "toys"],
+    keywords: ["toy"],
     code: "IS 9873",
     title: "Safety of Toys",
     category: "Consumer Products"
@@ -225,7 +228,10 @@ const isCodeDB = [
     category: "Household Appliances"
   },
   {
-    keywords: ["footwear", "shoe", "shoes"],
+    // NOTE: please double-check this entry against the official BIS
+    // catalogue; IS 15298 is, as far as I know, the PPE / safety footwear
+    // standard rather than a general footwear standard.
+    keywords: ["footwear", "shoe"],
     code: "IS 15298",
     title: "Footwear — General Requirements",
     category: "Consumer Products"
@@ -237,7 +243,7 @@ const isCodeDB = [
     category: "Electrical and Lighting"
   },
   {
-    keywords: ["steel", "tmt", "bar", "bars"],
+    keywords: ["steel", "tmt", "bar"],
     code: "IS 1786",
     title: "High Strength Deformed Steel Bars",
     category: "Construction Materials"
@@ -301,13 +307,23 @@ const modalContent = {
 
 /* =========================================================
    4. DOM ELEMENTS
+   Assigned in cacheDom() AFTER the page has loaded, so the
+   script works no matter where the <script> tag is placed.
    ========================================================= */
 
-const chatBox = document.getElementById("chat-box");
-const chatInput = document.getElementById("chat-input");
-const searchBox = document.getElementById("search-chat-box");
-const searchInput = document.getElementById("search-input");
-const modalOverlay = document.getElementById("modal-overlay");
+let chatBox;
+let chatInput;
+let searchBox;
+let searchInput;
+let modalOverlay;
+
+function cacheDom() {
+  chatBox = document.getElementById("chat-box");
+  chatInput = document.getElementById("chat-input");
+  searchBox = document.getElementById("search-chat-box");
+  searchInput = document.getElementById("search-input");
+  modalOverlay = document.getElementById("modal-overlay");
+}
 
 
 /* =========================================================
@@ -319,16 +335,18 @@ function getTranslation() {
 }
 
 function showView(viewId) {
+  const selectedView = document.getElementById(viewId);
+
+  if (!selectedView) {
+    return; // don't hide every view if the target id is wrong
+  }
+
   document.querySelectorAll(".view").forEach((view) => {
     view.classList.remove("show");
   });
 
-  const selectedView = document.getElementById(viewId);
-
-  if (selectedView) {
-    selectedView.classList.add("show");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+  selectedView.classList.add("show");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function addMessage(role, text, container = chatBox) {
@@ -336,9 +354,16 @@ function addMessage(role, text, container = chatBox) {
 
   message.className = `msg ${role}`;
   message.textContent = text;
+  // Makes the "\n" line breaks in search results actually visible.
+  message.style.whiteSpace = "pre-line";
 
   container.appendChild(message);
   container.scrollTop = container.scrollHeight;
+}
+
+// Enter should not send while an Indian-language IME is still composing text.
+function isPlainEnter(event) {
+  return event.key === "Enter" && !event.isComposing && event.keyCode !== 229;
 }
 
 
@@ -348,6 +373,11 @@ function addMessage(role, text, container = chatBox) {
 
 function updateContinueLabel() {
   const continueSub = document.getElementById("continue-sub");
+
+  if (!continueSub) {
+    return;
+  }
+
   const translatedText = getTranslation().continueSub;
 
   if (translatedText === "") {
@@ -361,6 +391,19 @@ function updateContinueLabel() {
 
 function setupLanguageCards() {
   const languageCards = document.querySelectorAll(".lang-card");
+
+  // Keep the state in sync with what the page shows on load.
+  const preselected = document.querySelector(".lang-card.selected");
+
+  if (preselected && preselected.dataset.lang) {
+    selectedLanguage = preselected.dataset.lang;
+  } else {
+    languageCards.forEach((card) => {
+      if (card.dataset.lang === selectedLanguage) {
+        card.classList.add("selected");
+      }
+    });
+  }
 
   languageCards.forEach((card) => {
     card.addEventListener("click", () => {
@@ -416,7 +459,12 @@ function renderQuickReplies() {
     button.textContent = `${index + 1}. ${getServiceName(service)}`;
 
     button.addEventListener("click", () => {
-      wrapper.querySelectorAll("button").forEach((item) => {
+      const buttons = wrapper.querySelectorAll("button");
+
+      // Disable only briefly to stop double-clicks. Previously the buttons
+      // stayed disabled forever, so after pressing Back you could not
+      // choose another service with them.
+      buttons.forEach((item) => {
         item.disabled = true;
       });
 
@@ -425,6 +473,12 @@ function renderQuickReplies() {
       setTimeout(() => {
         openService(serviceKey);
       }, 300);
+
+      setTimeout(() => {
+        buttons.forEach((item) => {
+          item.disabled = false;
+        });
+      }, 1200);
     });
 
     wrapper.appendChild(button);
@@ -435,61 +489,70 @@ function renderQuickReplies() {
 }
 
 function initializeChat() {
+  chatRunId += 1;
+  const runId = chatRunId;
+
+  chatLanguage = selectedLanguage;
   chatBox.innerHTML = "";
 
   const greeting = getTranslation().greeting;
 
   greeting.forEach((line, index) => {
     setTimeout(() => {
+      if (runId !== chatRunId) {
+        return; // a newer chat was started; drop this stale line
+      }
       addMessage("assistant", line);
     }, index * 300);
   });
 
   setTimeout(() => {
+    if (runId !== chatRunId) {
+      return;
+    }
     renderQuickReplies();
   }, greeting.length * 300);
 }
 
+// Whole-word matching, so "isi" no longer matches "decision" or "visit".
+const serviceIntents = [
+  { key: "verify", pattern: /\b(verify|verification|hallmarks?|isi|huid)\b/ },
+  { key: "search", pattern: /\b(search|is[\s-]?code|standards?)\b/ },
+  { key: "complaints", pattern: /\b(complaints?|consumer)\b/ },
+  { key: "manufacturer", pattern: /\b(manufacturers?|certification|scheme)\b/ }
+];
+
+function matchService(text) {
+  // 1. Number shortcuts: 1-4
+  if (/^[1-4]$/.test(text)) {
+    return Object.keys(serviceMap)[Number(text) - 1];
+  }
+
+  // 2. English keywords
+  for (const intent of serviceIntents) {
+    if (intent.pattern.test(text)) {
+      return intent.key;
+    }
+  }
+
+  // 3. Service names in any supported language (e.g. typed Hindi/Tamil names)
+  for (const serviceKey of Object.keys(serviceMap)) {
+    const names = Object.values(serviceMap[serviceKey].name);
+
+    if (names.some((name) => text.includes(name.toLowerCase()))) {
+      return serviceKey;
+    }
+  }
+
+  return null;
+}
+
 function handleUserMessage(messageText) {
   const text = messageText.toLowerCase().trim();
+  const serviceKey = matchService(text);
 
-  if (
-    text === "1" ||
-    text.includes("search") ||
-    text.includes("is code") ||
-    text.includes("is-code") ||
-    text.includes("standard")
-  ) {
-    openService("search");
-    return;
-  }
-
-  if (
-    text === "2" ||
-    text.includes("verify") ||
-    text.includes("hallmark") ||
-    text.includes("isi")
-  ) {
-    openService("verify");
-    return;
-  }
-
-  if (
-    text === "3" ||
-    text.includes("complaint") ||
-    text.includes("consumer")
-  ) {
-    openService("complaints");
-    return;
-  }
-
-  if (
-    text === "4" ||
-    text.includes("manufacturer") ||
-    text.includes("certification") ||
-    text.includes("help")
-  ) {
-    openService("manufacturer");
+  if (serviceKey) {
+    openService(serviceKey);
     return;
   }
 
@@ -516,12 +579,18 @@ function sendChatMessage() {
    8. IS-CODE SEARCH
    ========================================================= */
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function findIsCode(userText) {
   const searchText = userText.toLowerCase();
 
   return isCodeDB.find((entry) => {
     return entry.keywords.some((keyword) => {
-      return searchText.includes(keyword);
+      // whole word, allowing a plural "s" (toy/toys, bar/bars, shoe/shoes)
+      const pattern = new RegExp(`\\b${escapeRegExp(keyword)}(?:s|es)?\\b`);
+      return pattern.test(searchText);
     });
   });
 }
@@ -699,16 +768,18 @@ function setupEventListeners() {
   document.getElementById("continue-btn").addEventListener("click", () => {
     showView("view-chat");
 
-    if (!chatInitialized) {
+    // Start a fresh chat the first time AND whenever the language changed
+    // since the chat was last built (previously it stayed in the old language).
+    if (chatLanguage !== selectedLanguage) {
       initializeChat();
-      chatInitialized = true;
     }
   });
 
   document.getElementById("chat-send").addEventListener("click", sendChatMessage);
 
   chatInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
+    if (isPlainEnter(event)) {
+      event.preventDefault();
       sendChatMessage();
     }
   });
@@ -716,7 +787,8 @@ function setupEventListeners() {
   document.getElementById("search-send").addEventListener("click", sendSearchMessage);
 
   searchInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
+    if (isPlainEnter(event)) {
+      event.preventDefault();
       sendSearchMessage();
     }
   });
@@ -770,10 +842,15 @@ function setupEventListeners() {
    ========================================================= */
 
 function startApp() {
-  updateContinueLabel();
+  cacheDom();
   setupLanguageCards();
+  updateContinueLabel();
   setupSchemeCards();
   setupEventListeners();
 }
 
-startApp();
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startApp);
+} else {
+  startApp();
+}

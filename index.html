@@ -201,308 +201,131 @@
        Four cards per row on large screens
        ================================================== */
 
-    .lang-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .lang-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 900px;
+      margin: 28px auto;
+    }
 
-  .lang-heading { text-align: center; animation: fadeInUp 0.5s ease 0.05s both; }
-  .lang-heading .spark {
-    display: inline-block;
-    color: #2563eb;
-    font-size: 18px;
-    opacity: 0.6;
-    animation: sparkPulse 2.4s ease-in-out infinite;
-  }
-  .lang-heading h1 {
-    font-family: 'Baloo 2', -apple-system, sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    margin: 0;
-    color: #1e3a8a;
-  }
-  .lang-heading h2 { font-size: 22px; margin: 6px 0 0; color: #111827; font-weight: 600; }
-  .lang-heading p { font-size: 14px; color: #6b7280; margin: 12px 0 2px; }
-  .lang-heading .dash { color: #93c5fd; margin: 0 5px; }
-  .ai-word { position: relative; color: #1d4ed8; }
-  .ai-word::after {
-    content: "";
-    position: absolute;
-    left: 2px; right: 2px; bottom: -4px;
-    height: 3px;
-    border-radius: 2px;
-    background: linear-gradient(90deg, #FF9933, #ffffff 50%, #138808);
-  }
+    .lang-card {
+      min-height: 145px;
+      padding: 18px 14px;
+      border: 2px solid transparent;
+      border-radius: 18px;
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
 
-  .lang-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: 26px;
-    animation: fadeInUp 0.5s ease 0.15s both;
-  }
-  @media (max-width: 640px) {
-    .lang-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  .lang-card {
-    position: relative;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 18px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-  }
-  .lang-card:hover { border-color: #cbd5e1; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15,23,42,0.08); }
-  .lang-card.selected { border-color: #fb923c; box-shadow: 0 8px 16px rgba(251,146,60,0.2); }
-  .lang-card.selected::after {
-    content: "\2713";
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fb923c;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-  }
-  .card-icon { font-size: 26px; margin-bottom: 8px; line-height: 1; }
-  .card-icon.hindi-icon { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 24px; color: #ea580c; }
-  .lang-card .native { font-size: 16px; font-weight: 600; color: #111827; }
-  .lang-card .english { font-size: 12px; color: #6b7280; margin-top: 3px; }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-  .action-row {
-    margin-top: 26px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background: #fff;
-    border: 1px solid #f3f4f6;
-    border-radius: 999px;
-    padding: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    animation: fadeInUp 0.5s ease 0.2s both;
-  }
-  .continue-btn {
-    flex: 1;
-    background: linear-gradient(135deg, #1e3a8a, #2854c4);
-    color: #fff;
-    border: none;
-    border-radius: 999px;
-    padding: 8px 8px 8px 22px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    box-shadow: 0 4px 12px rgba(30,58,138,0.25);
-    transition: box-shadow 0.15s ease, background 0.15s ease, transform 0.15s ease;
-  }
-  .continue-btn:hover { background: linear-gradient(135deg, #1a316f, #1e3a8a); box-shadow: 0 6px 16px rgba(30,58,138,0.32); transform: translateY(-1px); }
-  .continue-btn .sub { font-weight: 400; color: #bfdbfe; font-size: 13px; }
-  .btn-label { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-  @media (max-width: 420px) {
-    .continue-btn { font-size: 12.5px; padding: 8px 6px 8px 14px; gap: 6px; }
-    .continue-btn .sub { font-size: 11px; }
-    .btn-arrow { width: 26px; height: 26px; font-size: 13px; }
-    .mic-btn { width: 40px; height: 40px; font-size: 16px; }
-  }
-  .btn-sparkle { font-size: 14px; }
-  .btn-arrow {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #fff;
-    color: #1e3a8a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
-  }
-  .mic-btn {
-    width: 48px;
-    height: 48px;
-    flex-shrink: 0;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    background: #fff;
-    cursor: pointer;
-    font-size: 18px;
-    color: #6b7280;
-  }
-  .mic-btn:hover { background: #f9fafb; }
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+    }
 
-  /* Generic section heading */
-  .section-title h3 { font-size: 18px; margin: 0; color: #111827; }
-  .section-title p { font-size: 13px; color: #6b7280; margin: 4px 0 0; }
+    .lang-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 22px rgba(16, 47, 104, .16);
+    }
 
-  /* Chat */
-  .chat-box {
-    margin-top: 16px;
-    border: 1px solid #e5e7eb;
-    background: #f9fafb;
-    border-radius: 12px;
-    padding: 16px;
-    height: 260px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .msg { max-width: 75%; padding: 10px 14px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; white-space: pre-wrap; }
-  .msg.assistant { align-self: flex-start; background: #fff; border: 1px solid #e5e7eb; color: #1f2937; }
-  .msg.user { align-self: flex-end; background: #1e3a8a; color: #fff; }
-  .citation { margin-top: 6px; font-size: 11.5px; color: #1d4ed8; display: flex; align-items: center; gap: 4px; }
+    .lang-card.selected {
+      border-color: #2370d5;
+      box-shadow: 0 8px 20px rgba(35, 112, 213, .24);
+    }
 
-  /* Quick-reply chips (the 1-4 service options) */
-  .quick-replies {
-    align-self: flex-start;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    max-width: 90%;
-  }
-  .quick-reply-btn {
-    border: 1px solid #bfdbfe;
-    background: #eff6ff;
-    color: #1e3a8a;
-    font-family: inherit;
-    font-size: 12.5px;
-    font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
-  }
-  .quick-reply-btn:hover { background: #dbeafe; border-color: #93c5fd; }
-  .quick-reply-btn:disabled { opacity: 0.5; cursor: default; }
+    .card-icon {
+      font-size: 38px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
 
-  .chat-input-row { margin-top: 12px; display: flex; gap: 8px; }
-  .chat-input-row input {
-    flex: 1;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 13.5px;
-  }
-  .chat-input-row input:focus { outline: none; border-color: #1e3a8a; }
-  .send-btn {
-    width: 42px; height: 42px; flex-shrink: 0;
-    border: none; border-radius: 8px;
-    background: #1e3a8a; color: #fff;
-    cursor: pointer; font-size: 16px;
-  }
-  .send-btn:hover { background: #1e3175; }
+    .hindi-icon {
+      font-family: "Baloo 2", Arial, sans-serif;
+      font-size: 42px;
+      color: #d76a00;
+      font-weight: 700;
+    }
 
-  /* Verify */
-  .verify-row { margin-top: 16px; display: flex; gap: 8px; }
-  .verify-row input {
-    flex: 1; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 14px; font-size: 13.5px;
-  }
-  .verify-row input:focus { outline: none; border-color: #1e3a8a; }
-  .verify-btn { border: none; background: #1e3a8a; color: #fff; border-radius: 8px; padding: 0 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
-  .verify-btn:hover { background: #1e3175; }
-  .result-box { margin-top: 16px; border: 1px solid #bbf7d0; background: #f0fdf4; border-radius: 10px; padding: 14px; font-size: 13.5px; color: #14532d; }
-  .result-box.warn { border-color: #fde68a; background: #fffbeb; color: #92400e; }
-  .result-box .title { font-weight: 600; }
+    .native {
+      color: #102f68;
+      font-size: 20px;
+      font-weight: 700;
+    }
 
-  /* Forms */
-  .form-stack { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .form-stack input, .form-stack select, .form-stack textarea {
-    width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; font-family: inherit;
-  }
-  .form-stack input:focus, .form-stack select:focus, .form-stack textarea:focus { outline: none; border-color: #1e3a8a; }
-  .submit-btn {
-    width: 100%; border: none; background: #1e3a8a; color: #fff; border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer;
-  }
-  .submit-btn:hover { background: #1e3175; }
+    .english {
+      margin-top: 5px;
+      color: #536b8c;
+      font-size: 14px;
+    }
 
-  /* Scheme cards */
-  .scheme-grid { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 640px) { .scheme-grid { grid-template-columns: 1fr; } }
-  .scheme-card {
-    border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px; text-align: left; background: #fff; cursor: pointer;
-  }
-  .scheme-card:hover { border-color: #93c5fd; background: #eff6ff; }
-  .scheme-card.selected { border-color: #1e3a8a; background: #eff6ff; box-shadow: 0 0 0 2px rgba(30,58,138,0.12); }
-  .scheme-card .name { font-weight: 600; color: #111827; font-size: 14px; }
-  .scheme-card .desc { font-size: 12px; color: #6b7280; margin-top: 4px; }
+    /* Tablet: two cards per row */
+    @media (max-width: 700px) {
+      .lang-grid {
+        grid-template-columns: repeat(2, minmax(130px, 1fr));
+        gap: 12px;
+      }
+    }
 
-  .scheme-detail {
-    margin-top: 16px;
-    border: 1px solid #bfdbfe;
-    background: #eff6ff;
-    border-radius: 10px;
-    padding: 16px;
-  }
-  .scheme-detail .title { font-weight: 600; color: #111827; font-size: 14px; margin-bottom: 8px; }
-  .scheme-detail ol { margin: 0; padding-left: 18px; font-size: 13px; color: #1f2937; line-height: 1.7; }
+    /* Mobile */
+    @media (max-width: 480px) {
+      h2 {
+        font-size: 30px;
+      }
 
-  /* Footer */
-  footer {
-    border-top: 1px solid #e5e7eb;
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #6b7280;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  footer a, footer .links button {
-    background: none; border: none; color: #6b7280; font-size: 12px; cursor: pointer; margin-left: 14px; padding: 0;
-  }
-  footer a:hover, footer .links button:hover { color: #111827; }
+      .welcome-mark {
+        font-size: 26px;
+      }
 
-  /* Modal (About Us / Privacy Policy / Contact) */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(17, 24, 39, 0.5);
-    align-items: center; justify-content: center;
-    padding: 20px; z-index: 50;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal-box {
-    background: #fff; border-radius: 14px; max-width: 420px; width: 100%;
-    padding: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-  }
-  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .modal-header span { font-weight: 700; font-size: 16px; color: #111827; }
-  .modal-close { border: none; background: none; font-size: 16px; cursor: pointer; color: #6b7280; }
-  .modal-body { font-size: 13.5px; color: #374151; line-height: 1.6; }
-</style>
+      .lang-grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+        gap: 10px;
+      }
+
+      .lang-card {
+        min-height: 125px;
+        padding: 14px 10px;
+      }
+
+      .brand p {
+        display: none;
+      }
+
+      .bis-logo {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  </style>
 </head>
-<body>
 
-<div class="app">
+<body>
   <header>
     <div class="brand">
-      <!-- Official BIS logo -->
       <img
-        class="emblem"
-        src="data:image/png;base64,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"
-        alt="Bureau of Indian Standards Logo"
-      />
+        class="bis-logo-img"
+        src="https://www.bis.gov.in/wp-content/uploads/2024/12/BIS-LOGO.png"
+        alt="Bureau of Indian Standards logo"
+      >
+
+      <div class="brand-line"></div>
+
       <div>
-        <div class="brand-name">BIS Saathi</div>
-        <div class="brand-tagline">मानक · सुरक्षा · विश्वास</div>
+        <h1>BIS Saathi</h1>
+        <p>मानक&nbsp; • &nbsp;सुरक्षा&nbsp; • &nbsp;विश्वास</p>
       </div>
     </div>
 
-    <!-- System status badge -->
     <div id="system-status" class="system-status">Checking…</div>
   </header>
 
   <main>
-    <!-- Language Selector -->
     <div class="view show" id="view-language">
       <div class="lang-hero">
         <div class="hero-photo left" aria-hidden="true"></div>
@@ -510,659 +333,847 @@
 
         <div class="lang-content">
           <div class="lang-heading">
-            <h1><span class="spark">✦</span> Welcome to BIS Saathi <span class="spark">✦</span></h1>
+            <h1>
+              <span class="spark">✦</span>
+              Welcome to BIS Saathi
+              <span class="spark">✦</span>
+            </h1>
+
             <h2>भारतीय मानक ब्यूरो <span class="ai-word">AI</span> साथी</h2>
+
             <p>Choose your preferred language to begin</p>
             <p><span class="dash">–</span> अपनी पसंदीदा भाषा चुनें <span class="dash">–</span></p>
           </div>
+
+          <!-- Language cards -->
           <div class="lang-grid" id="lang-grid">
             <div class="lang-card" data-lang="en" style="background:#e9f2fe;">
               <div class="card-icon">🌐</div>
               <div class="native">English</div>
             </div>
+
             <div class="lang-card selected" data-lang="hi" style="background:#fff0e2;">
               <div class="card-icon hindi-icon">अ</div>
               <div class="native">हिन्दी</div>
               <div class="english">(Hindi)</div>
             </div>
+
             <div class="lang-card" data-lang="ta" style="background:#f2edfe;">
               <div class="card-icon">🛕</div>
               <div class="native">தமிழ்</div>
               <div class="english">(Tamil)</div>
             </div>
+
             <div class="lang-card" data-lang="bn" style="background:#e9f8ee;">
               <div class="card-icon">🍃</div>
               <div class="native">বাংলা</div>
               <div class="english">(Bengali)</div>
             </div>
+
             <div class="lang-card" data-lang="te" style="background:#fdeaf1;">
               <div class="card-icon">🌺</div>
               <div class="native">తెలుగు</div>
               <div class="english">(Telugu)</div>
             </div>
+
             <div class="lang-card" data-lang="mr" style="background:#e6f6fb;">
               <div class="card-icon">🏛️</div>
               <div class="native">मराठी</div>
               <div class="english">(Marathi)</div>
             </div>
+
             <div class="lang-card" data-lang="gu" style="background:#f4eefe;">
               <div class="card-icon">🌸</div>
               <div class="native">ગુજરાતી</div>
               <div class="english">(Gujarati)</div>
             </div>
+
             <div class="lang-card" data-lang="kn" style="background:#fff1e0;">
               <div class="card-icon">🪔</div>
               <div class="native">ಕನ್ನಡ</div>
               <div class="english">(Kannada)</div>
             </div>
           </div>
+
           <div class="action-row">
             <button class="continue-btn" id="continue-btn">
-              <span class="btn-label"><span class="btn-sparkle">✨</span> Continue <span class="sub" id="continue-sub">/ आगे बढ़ें</span></span>
+              <span class="btn-label">
+                <span class="btn-sparkle">✨</span>
+                Continue
+                <span class="sub" id="continue-sub">/ आगे बढ़ें</span>
+              </span>
               <span class="btn-arrow">→</span>
             </button>
+
             <button class="mic-btn" title="Mic / माइक">🎤</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Chat / Home -->
     <div class="view" id="view-chat" style="max-width: 640px;">
       <div class="section-title">
         <h3>BIS Saathi</h3>
         <p>Ask me anything about BIS services and Indian Standards.</p>
       </div>
-      <div class="chat-box" id="chat-box">
-        <!-- Bot messages will be inserted by JS -->
-      </div>
+
+      <div class="chat-box" id="chat-box"></div>
+
       <div class="chat-input-row">
         <input type="text" id="chat-input" placeholder="Type your message…" />
         <button class="send-btn" id="chat-send">➤</button>
       </div>
     </div>
 
-    <!-- IS-Code Search -->
     <div class="view" id="view-search" style="max-width: 640px;">
       <div class="section-title">
         <h3>IS-Code Search</h3>
         <p>Describe your product to find the applicable Indian Standard.</p>
       </div>
-      <div class="chat-box" id="search-chat-box">
-        <!-- Search results appear here -->
-      </div>
+
+      <div class="chat-box" id="search-chat-box"></div>
+
       <div class="chat-input-row">
-        <input type="text" id="search-input" placeholder="e.g. I manufacture LED bulbs for home use..." />
+        <input
+          type="text"
+          id="search-input"
+          placeholder="e.g. I manufacture LED bulbs for home use..."
+        />
         <button class="send-btn" id="search-send">➤</button>
       </div>
     </div>
 
-    <!-- Verify -->
     <div class="view" id="view-verify" style="max-width: 480px;">
       <div class="section-title">
         <h3>Verify ISI &amp; Hallmarks</h3>
         <p>Enter a CM/L license number or 6-digit HUID to verify.</p>
       </div>
+
       <div class="verify-row">
         <input type="text" id="verify-input" placeholder="e.g. CML-1234567" />
         <button class="verify-btn" id="verify-btn">Verify</button>
       </div>
+
       <div class="result-box" id="verify-result" style="display:none;">
         <div class="title">✅ License appears valid</div>
-        <div style="margin-top:4px; color:#166534;">Product category: Household electrical appliances. Scheme: ISI Mark (Scheme I).</div>
+        <div style="margin-top:4px; color:#166534;">
+          Product category: Household electrical appliances. Scheme: ISI Mark (Scheme I).
+        </div>
       </div>
     </div>
 
-    <!-- Complaints -->
     <div class="view" id="view-complaints" style="max-width: 480px;">
       <div class="section-title">
         <h3>Consumer Complaints</h3>
         <p>Tell us about a product quality or certification issue.</p>
       </div>
+
       <div class="form-stack" id="complaint-form">
         <input type="text" id="complaint-product" placeholder="Product name" />
+
         <select id="complaint-issue">
           <option>Issue type: Counterfeit ISI mark</option>
           <option>Issue type: Product not meeting standard</option>
           <option>Issue type: Missing certification</option>
         </select>
+
         <textarea id="complaint-desc" rows="3" placeholder="Describe the issue..."></textarea>
+
         <button class="submit-btn" id="complaint-submit">Submit complaint →</button>
       </div>
+
       <div class="result-box" id="complaint-result" style="display:none;"></div>
     </div>
 
-    <!-- Manufacturer -->
     <div class="view" id="view-manufacturer" style="max-width: 640px;">
       <div class="section-title">
         <h3>Manufacturer Help</h3>
         <p>Select a certification scheme to see the step-by-step process.</p>
       </div>
+
       <div class="scheme-grid" id="scheme-grid">
         <div class="scheme-card" data-scheme="ISI Mark (Scheme I)">
           <div class="name">ISI Mark (Scheme I)</div>
           <div class="desc">Mandatory for products under a Quality Control Order.</div>
         </div>
+
         <div class="scheme-card" data-scheme="CRS (Scheme II)">
           <div class="name">CRS (Scheme II)</div>
           <div class="desc">Compulsory registration for electronics &amp; IT products.</div>
         </div>
+
         <div class="scheme-card" data-scheme="FMCS">
           <div class="name">FMCS</div>
           <div class="desc">Foreign Manufacturers Certification Scheme.</div>
         </div>
+
         <div class="scheme-card" data-scheme="ECO Mark">
           <div class="name">ECO Mark</div>
           <div class="desc">Voluntary environment-friendly product labelling.</div>
         </div>
       </div>
+
       <div class="scheme-detail" id="scheme-detail" style="display:none;"></div>
     </div>
   </main>
 
   <footer>
-    <div>
-      🇮🇳  Bureau of Indian Standards — Standards for Quality, Safety &amp; Trust
-    </div>
+    <div>🇮🇳 Bureau of Indian Standards — Standards for Quality, Safety &amp; Trust</div>
+
     <div class="links">
       <button id="footer-about">About Us</button>
       <button id="footer-privacy">Privacy Policy</button>
       <button id="footer-contact">Contact</button>
     </div>
   </footer>
-</div>
 
-<!-- About Us / Privacy Policy / Contact modal -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box">
-    <div class="modal-header">
-      <span id="modal-title"></span>
-      <button class="modal-close" id="modal-close">✕</button>
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span id="modal-title"></span>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+
+      <div class="modal-body" id="modal-body"></div>
     </div>
-    <div class="modal-body" id="modal-body"></div>
   </div>
-</div>
 
-<script>
-  let selectedLanguage = "hi"; // default
-  let chatInitialized = false;
+  <script>
+    let selectedLanguage = "hi";
+    let chatInitialized = false;
 
-  // Per-language strings used once a language is picked: the Continue
-  // button's native label, the chat greeting, the "opening X" phrasing,
-  // and the fallback prompt when the bot doesn't recognise the input.
-  const translations = {
-    en: {
-      continueSub: '',
-      greeting: [
-        "Namaste! I am BIS Saathi.",
-        "I can help you with BIS services and Indian Standards.",
-        "Which service would you like?"
-      ],
-      openingPrefix: 'Opening ',
-      openingSuffix: '.',
-      fallback: "Please choose a service (1–4) or type its name (Search, Verify, Complaints, Manufacturer)."
-    },
-    hi: {
-      continueSub: 'आगे बढ़ें',
-      greeting: [
-        "नमस्ते! मैं BIS Saathi हूँ।",
-        "मैं आपको BIS सेवाओं और भारतीय मानकों के बारे में मदद कर सकता हूँ।",
-        "बताइए, आप कौन सी सेवा चाहते हैं?"
-      ],
-      openingPrefix: 'ठीक है, ',
-      openingSuffix: ' खोल रहा हूँ।',
-      fallback: "कृपया 1–4 में से कोई सेवा चुनें, या सेवा का नाम लिखें (Search, Verify, Complaints, Manufacturer)।"
-    },
-    ta: {
-      continueSub: 'தொடரவும்',
-      greeting: [
-        "வணக்கம்! நான் BIS Saathi.",
-        "BIS சேவைகள் மற்றும் இந்திய தரநிலைகள் குறித்து நான் உங்களுக்கு உதவ முடியும்.",
-        "நீங்கள் எந்த சேவையை விரும்புகிறீர்கள்?"
-      ],
-      openingPrefix: 'சரி, ',
-      openingSuffix: ' திறக்கிறேன்.',
-      fallback: "தயவுசெய்து 1–4 இல் ஒரு சேவையைத் தேர்ந்தெடுக்கவும், அல்லது அதன் பெயரை தட்டச்சு செய்யவும் (Search, Verify, Complaints, Manufacturer)."
-    },
-    bn: {
-      continueSub: 'চালিয়ে যান',
-      greeting: [
-        "নমস্তে! আমি BIS Saathi।",
-        "আমি আপনাকে BIS পরিষেবা এবং ভারতীয় মানদণ্ড সম্পর্কে সাহায্য করতে পারি।",
-        "আপনি কোন পরিষেবা চান?"
-      ],
-      openingPrefix: 'ঠিক আছে, ',
-      openingSuffix: ' খুলছি।',
-      fallback: "অনুগ্রহ করে 1–4 থেকে একটি পরিষেবা বেছে নিন, বা এর নাম লিখুন (Search, Verify, Complaints, Manufacturer)।"
-    },
-    te: {
-      continueSub: 'కొనసాగించండి',
-      greeting: [
-        "నమస్తే! నేను BIS Saathi.",
-        "BIS సేవలు మరియు భారతీయ ప్రమాణాల గురించి నేను మీకు సహాయం చేయగలను.",
-        "మీకు ఏ సేవ కావాలి?"
-      ],
-      openingPrefix: 'సరే, ',
-      openingSuffix: ' తెరుస్తున్నాను.',
-      fallback: "దయచేసి 1–4 నుండి ఒక సేవను ఎంచుకోండి, లేదా దాని పేరు టైప్ చేయండి (Search, Verify, Complaints, Manufacturer)."
-    },
-    mr: {
-      continueSub: 'पुढे जा',
-      greeting: [
-        "नमस्ते! मी BIS Saathi आहे.",
-        "मी तुम्हाला BIS सेवा आणि भारतीय मानकांबद्दल मदत करू शकतो.",
-        "तुम्हाला कोणती सेवा हवी आहे?"
-      ],
-      openingPrefix: 'ठीक आहे, ',
-      openingSuffix: ' उघडत आहे.',
-      fallback: "कृपया 1–4 मधून एक सेवा निवडा, किंवा तिचे नाव टाइप करा (Search, Verify, Complaints, Manufacturer)."
-    },
-    gu: {
-      continueSub: 'આગળ વધો',
-      greeting: [
-        "નમસ્તે! હું BIS Saathi છું.",
-        "હું તમને BIS સેવાઓ અને ભારતીય ધોરણો વિશે મદદ કરી શકું છું.",
-        "તમને કઈ સેવા જોઈએ છે?"
-      ],
-      openingPrefix: 'ઠીક છે, ',
-      openingSuffix: ' ખોલી રહ્યો છું.',
-      fallback: "કૃપા કરીને 1–4 માંથી એક સેવા પસંદ કરો, અથવા તેનું નામ ટાઈપ કરો (Search, Verify, Complaints, Manufacturer)."
-    },
-    kn: {
-      continueSub: 'ಮುಂದುವರಿಸಿ',
-      greeting: [
-        "ನಮಸ್ತೆ! ನಾನು BIS Saathi.",
-        "BIS ಸೇವೆಗಳು ಮತ್ತು ಭಾರತೀಯ ಗುಣಮಟ್ಟಗಳ ಬಗ್ಗೆ ನಾನು ನಿಮಗೆ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ.",
-        "ನಿಮಗೆ ಯಾವ ಸೇವೆ ಬೇಕು?"
-      ],
-      openingPrefix: 'ಸರಿ, ',
-      openingSuffix: ' ತೆರೆಯುತ್ತಿದ್ದೇನೆ.',
-      fallback: "ದಯವಿಟ್ಟು 1–4 ರಿಂದ ಒಂದು ಸೇವೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ, ಅಥವಾ ಅದರ ಹೆಸರನ್ನು ಟೈಪ್ ಮಾಡಿ (Search, Verify, Complaints, Manufacturer)."
+    const translations = {
+      en: {
+        continueSub: "",
+        greeting: [
+          "Namaste! I am BIS Saathi.",
+          "I can help you with BIS services and Indian Standards.",
+          "Which service would you like?"
+        ],
+        openingPrefix: "Opening ",
+        openingSuffix: ".",
+        fallback: "Please choose a service (1–4) or type its name (Search, Verify, Complaints, Manufacturer)."
+      },
+
+      hi: {
+        continueSub: "आगे बढ़ें",
+        greeting: [
+          "नमस्ते! मैं BIS Saathi हूँ।",
+          "मैं आपको BIS सेवाओं और भारतीय मानकों के बारे में मदद कर सकता हूँ।",
+          "बताइए, आप कौन सी सेवा चाहते हैं?"
+        ],
+        openingPrefix: "ठीक है, ",
+        openingSuffix: " खोल रहा हूँ।",
+        fallback: "कृपया 1–4 में से कोई सेवा चुनें, या सेवा का नाम लिखें (Search, Verify, Complaints, Manufacturer)।"
+      },
+
+      ta: {
+        continueSub: "தொடரவும்",
+        greeting: [
+          "வணக்கம்! நான் BIS Saathi.",
+          "BIS சேவைகள் மற்றும் இந்திய தரநிலைகள் குறித்து நான் உங்களுக்கு உதவ முடியும்.",
+          "நீங்கள் எந்த சேவையை விரும்புகிறீர்கள்?"
+        ],
+        openingPrefix: "சரி, ",
+        openingSuffix: " திறக்கிறேன்.",
+        fallback: "தயவுசெய்து 1–4 இல் ஒரு சேவையைத் தேர்ந்தெடுக்கவும், அல்லது அதன் பெயரை தட்டச்சு செய்யவும் (Search, Verify, Complaints, Manufacturer)."
+      },
+
+      bn: {
+        continueSub: "চালিয়ে যান",
+        greeting: [
+          "নমস্তে! আমি BIS Saathi।",
+          "আমি আপনাকে BIS পরিষেবা এবং ভারতীয় মানদণ্ড সম্পর্কে সাহায্য করতে পারি।",
+          "আপনি কোন পরিষেবা চান?"
+        ],
+        openingPrefix: "ঠিক আছে, ",
+        openingSuffix: " খুলছি।",
+        fallback: "অনুগ্রহ করে 1–4 থেকে একটি পরিষেবা বেছে নিন, বা এর নাম লিখুন (Search, Verify, Complaints, Manufacturer)।"
+      },
+
+      te: {
+        continueSub: "కొనసాగించండి",
+        greeting: [
+          "నమస్తే! నేను BIS Saathi.",
+          "BIS సేవలు మరియు భారతీయ ప్రమాణాల గురించి నేను మీకు సహాయం చేయగలను.",
+          "మీకు ఏ సేవ కావాలి?"
+        ],
+        openingPrefix: "సరే, ",
+        openingSuffix: " తెరుస్తున్నాను.",
+        fallback: "దయచేసి 1–4 నుండి ఒక సేవను ఎంచుకోండి, లేదా దాని పేరు టైప్ చేయండి (Search, Verify, Complaints, Manufacturer)."
+      },
+
+      mr: {
+        continueSub: "पुढे जा",
+        greeting: [
+          "नमस्ते! मी BIS Saathi आहे.",
+          "मी तुम्हाला BIS सेवा आणि भारतीय मानकांबद्दल मदत करू शकतो.",
+          "तुम्हाला कोणती सेवा हवी आहे?"
+        ],
+        openingPrefix: "ठीक आहे, ",
+        openingSuffix: " उघडत आहे.",
+        fallback: "कृपया 1–4 मधून एक सेवा निवडा, किंवा तिचे नाव टाइप करा (Search, Verify, Complaints, Manufacturer)."
+      },
+
+      gu: {
+        continueSub: "આગળ વધો",
+        greeting: [
+          "નમસ્તે! હું BIS Saathi છું.",
+          "હું તમને BIS સેવાઓ અને ભારતીય ધોરણો વિશે મદદ કરી શકું છું.",
+          "તમને કઈ સેવા જોઈએ છે?"
+        ],
+        openingPrefix: "ઠીક છે, ",
+        openingSuffix: " ખોલી રહ્યો છું.",
+        fallback: "કૃપા કરીને 1–4 માંથી એક સેવા પસંદ કરો, અથવા તેનું નામ ટાઈપ કરો (Search, Verify, Complaints, Manufacturer)."
+      },
+
+      kn: {
+        continueSub: "ಮುಂದುವರಿಸಿ",
+        greeting: [
+          "ನಮಸ್ತೆ! ನಾನು BIS Saathi.",
+          "BIS ಸೇವೆಗಳು ಮತ್ತು ಭಾರತೀಯ ಗುಣಮಟ್ಟಗಳ ಬಗ್ಗೆ ನಾನು ನಿಮಗೆ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ.",
+          "ನಿಮಗೆ ಯಾವ ಸೇವೆ ಬೇಕು?"
+        ],
+        openingPrefix: "ಸರಿ, ",
+        openingSuffix: " ತೆರೆಯುತ್ತಿದ್ದೇನೆ.",
+        fallback: "ದಯವಿಟ್ಟು 1–4 ರಿಂದ ಒಂದು ಸೇವೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ, ಅಥವಾ ಅದರ ಹೆಸರನ್ನು ಟೈಪ್ ಮಾಡಿ (Search, Verify, Complaints, Manufacturer)."
+      }
+    };
+
+    function t() {
+      return translations[selectedLanguage] || translations.en;
     }
-  };
 
-  function t() {
-    return translations[selectedLanguage] || translations.en;
-  }
+    function updateContinueLabel() {
+      const sub = document.getElementById("continue-sub");
+      const text = t().continueSub;
 
-  function updateContinueLabel() {
-    const sub = document.getElementById('continue-sub');
-    const text = t().continueSub;
-    if (!text) {
-      sub.style.display = 'none';
-    } else {
-      sub.style.display = '';
-      sub.textContent = '/ ' + text;
-    }
-  }
-
-  // ---------- View switching ----------
-  function showView(id) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('show'));
-    document.getElementById(id).classList.add('show');
-  }
-
-  // ---------- Language selection ----------
-  const langCards = document.querySelectorAll('.lang-card');
-  langCards.forEach(card => {
-    card.addEventListener('click', () => {
-      langCards.forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      selectedLanguage = card.getAttribute('data-lang');
-      updateContinueLabel();
-    });
-  });
-  updateContinueLabel();
-
-  // ---------- Continue button -> go to Chat + intro ----------
-  document.getElementById('continue-btn').addEventListener('click', () => {
-    showView('view-chat');
-    if (!chatInitialized) {
-      initChat();
-      chatInitialized = true;
-    }
-  });
-
-  // ---------- System status check ----------
-  const API_BASE = "https://bissaathi-api.onrender.com";
-  const statusEl = document.getElementById('system-status');
-
-  async function checkServer() {
-    statusEl.textContent = "Checking…";
-    statusEl.className = "system-status";
-
-    try {
-      const res = await fetch(API_BASE + "/api/health");
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
-
-      if (data.ai === "configured" || data.ai_configured) {
-        statusEl.textContent = "System ready";
-        statusEl.className = "system-status ready";
+      if (!text) {
+        sub.style.display = "none";
       } else {
+        sub.style.display = "";
+        sub.textContent = "/ " + text;
+      }
+    }
+
+    function showView(id) {
+      document.querySelectorAll(".view").forEach((view) => {
+        view.classList.remove("show");
+      });
+
+      document.getElementById(id).classList.add("show");
+    }
+
+    const langCards = document.querySelectorAll(".lang-card");
+
+    langCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        langCards.forEach((item) => item.classList.remove("selected"));
+        card.classList.add("selected");
+
+        selectedLanguage = card.getAttribute("data-lang");
+        updateContinueLabel();
+      });
+    });
+
+    updateContinueLabel();
+
+    document.getElementById("continue-btn").addEventListener("click", () => {
+      showView("view-chat");
+
+      if (!chatInitialized) {
+        initChat();
+        chatInitialized = true;
+      }
+    });
+
+    const API_BASE = "https://bissaathi-api.onrender.com";
+    const statusEl = document.getElementById("system-status");
+
+    async function checkServer() {
+      statusEl.textContent = "Checking…";
+      statusEl.className = "system-status";
+
+      try {
+        const response = await fetch(API_BASE + "/api/health");
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        if (data.ai === "configured" || data.ai_configured) {
+          statusEl.textContent = "System ready";
+          statusEl.className = "system-status ready";
+        } else {
+          statusEl.textContent = "Backend unavailable";
+          statusEl.className = "system-status error";
+        }
+      } catch (error) {
+        console.error("Health check failed:", error);
         statusEl.textContent = "Backend unavailable";
         statusEl.className = "system-status error";
       }
-    } catch (e) {
-      console.error("Health check failed:", e);
-      statusEl.textContent = "Backend unavailable";
-      statusEl.className = "system-status error";
     }
-  }
 
-  checkServer();
+    checkServer();
 
-  // ---------- Chat (Talkbot) ----------
-  const chatBox = document.getElementById('chat-box');
-  const chatInput = document.getElementById('chat-input');
+    const chatBox = document.getElementById("chat-box");
+    const chatInput = document.getElementById("chat-input");
 
-  // Central place describing each of the 4 services, keyed the same way
-  // whether the user types "1"/"search"/etc. or clicks a quick-reply chip.
-  const serviceMap = {
-    search: {
-      view: 'view-search',
-      name: {
-        en: 'IS-Code Search',
-        hi: 'आईएस-कोड खोज',
-        ta: 'IS-குறியீடு தேடல்',
-        bn: 'IS-কোড অনুসন্ধান',
-        te: 'IS-కోడ్ శోధన',
-        mr: 'IS-कोड शोध',
-        gu: 'IS-કોડ શોધ',
-        kn: 'IS-ಕೋಡ್ ಹುಡುಕಾಟ'
+    const serviceMap = {
+      search: {
+        view: "view-search",
+        name: {
+          en: "IS-Code Search",
+          hi: "आईएस-कोड खोज",
+          ta: "IS-குறியீடு தேடல்",
+          bn: "IS-কোড অনুসন্ধান",
+          te: "IS-కోడ్ శోధన",
+          mr: "IS-कोड शोध",
+          gu: "IS-કોડ શોધ",
+          kn: "IS-ಕೋಡ್ ಹುಡುಕಾಟ"
+        }
+      },
+
+      verify: {
+        view: "view-verify",
+        name: {
+          en: "Verify ISI & Hallmarks",
+          hi: "ISI और हॉलमार्क सत्यापन",
+          ta: "ISI & ஹால்மார்க் சரிபார்ப்பு",
+          bn: "ISI ও হলমার্ক যাচাই",
+          te: "ISI & హాల్‌మార్క్ ధృవీకరణ",
+          mr: "ISI आणि हॉलमार्क पडताळणी",
+          gu: "ISI અને હોલમાર્ક ચકાસણી",
+          kn: "ISI ಮತ್ತು ಹಾಲ್‌ಮಾರ್ಕ್ ಪರಿಶೀಲನೆ"
+        }
+      },
+
+      complaints: {
+        view: "view-complaints",
+        name: {
+          en: "Consumer Complaints",
+          hi: "उपभोक्ता शिकायतें",
+          ta: "நுகர்வோர் புகார்கள்",
+          bn: "ভোক্তা অভিযোগ",
+          te: "వినియోగదారు ఫిర్యాదులు",
+          mr: "ग्राहक तक्रारी",
+          gu: "ગ્રાહક ફરિયાદો",
+          kn: "ಗ್ರಾಹಕ ದೂರುಗಳು"
+        }
+      },
+
+      manufacturer: {
+        view: "view-manufacturer",
+        name: {
+          en: "Manufacturer Help",
+          hi: "निर्माता सहायता",
+          ta: "உற்பத்தியாளர் உதவி",
+          bn: "প্রস্তুতকারক সহায়তা",
+          te: "తయారీదారు సహాయం",
+          mr: "उत्पादक मदत",
+          gu: "ઉત્પાદક સહાય",
+          kn: "ತಯಾರಕರ ಸಹಾಯ"
+        }
       }
-    },
-    verify: {
-      view: 'view-verify',
-      name: {
-        en: 'Verify ISI & Hallmarks',
-        hi: 'ISI और हॉलमार्क सत्यापन',
-        ta: 'ISI & ஹால்மார்க் சரிபார்ப்பு',
-        bn: 'ISI ও হলমার্ক যাচাই',
-        te: 'ISI & హాల్‌మార్క్ ధృవీకరణ',
-        mr: 'ISI आणि हॉलमार्क पडताळणी',
-        gu: 'ISI અને હોલમાર્ક ચકાસણી',
-        kn: 'ISI ಮತ್ತು ಹಾಲ್‌ಮಾರ್ಕ್ ಪರಿಶೀಲನೆ'
-      }
-    },
-    complaints: {
-      view: 'view-complaints',
-      name: {
-        en: 'Consumer Complaints',
-        hi: 'उपभोक्ता शिकायतें',
-        ta: 'நுகர்வோர் புகார்கள்',
-        bn: 'ভোক্তা অভিযোগ',
-        te: 'వినియోగదారు ఫిర్యాదులు',
-        mr: 'ग्राहक तक्रारी',
-        gu: 'ગ્રાહક ફરિયાદો',
-        kn: 'ಗ್ರಾಹಕ ದೂರುಗಳು'
-      }
-    },
-    manufacturer: {
-      view: 'view-manufacturer',
-      name: {
-        en: 'Manufacturer Help',
-        hi: 'निर्माता सहायता',
-        ta: 'உற்பத்தியாளர் உதவி',
-        bn: 'প্রস্তুতকারক সহায়তা',
-        te: 'తయారీదారు సహాయం',
-        mr: 'उत्पादक मदत',
-        gu: 'ઉત્પાદક સહાય',
-        kn: 'ತಯಾರಕರ ಸಹಾಯ'
-      }
+    };
+
+    function serviceName(service) {
+      return service.name[selectedLanguage] || service.name.en;
     }
-  };
 
-  function serviceName(svc) {
-    return svc.name[selectedLanguage] || svc.name.en;
-  }
+    function addMsg(role, text, container) {
+      const box = container || chatBox;
+      const message = document.createElement("div");
 
-  function openService(key) {
-    const svc = serviceMap[key];
-    if (!svc) return;
-    const tr = t();
-    addMsg('assistant', tr.openingPrefix + serviceName(svc) + tr.openingSuffix);
-    setTimeout(() => showView(svc.view), 600);
-  }
+      message.className = "msg " + role;
+      message.textContent = text;
 
-  function getBotIntroLines() {
-    return t().greeting;
-  }
+      box.appendChild(message);
+      box.scrollTop = box.scrollHeight;
 
-  function initChat() {
-    chatBox.innerHTML = '';
-    const lines = getBotIntroLines();
-    lines.forEach((line, idx) => {
-      setTimeout(() => addMsg('assistant', line), idx * 250);
-    });
-    setTimeout(renderQuickReplies, lines.length * 250);
-  }
+      return message;
+    }
 
-  function addMsg(role, text, container) {
-    const box = container || chatBox;
-    const div = document.createElement('div');
-    div.className = 'msg ' + role;
-    div.textContent = text;
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
-    return div;
-  }
+    function openService(key) {
+      const service = serviceMap[key];
 
-  // Renders the "1. IS-Code Search / 2. Verify ISI & Hallmarks / ..." options
-  // as real clickable chips instead of plain, unclickable text lines.
-  function renderQuickReplies() {
-    const wrap = document.createElement('div');
-    wrap.className = 'quick-replies';
+      if (!service) {
+        return;
+      }
 
-    Object.keys(serviceMap).forEach((key, idx) => {
-      const svc = serviceMap[key];
-      const btn = document.createElement('button');
-      btn.className = 'quick-reply-btn';
-      btn.textContent = (idx + 1) + '. ' + serviceName(svc);
-      btn.addEventListener('click', () => {
-        Array.from(wrap.querySelectorAll('button')).forEach(b => b.disabled = true);
-        addMsg('user', btn.textContent);
-        setTimeout(() => openService(key), 300);
+      const translation = t();
+      addMsg(
+        "assistant",
+        translation.openingPrefix + serviceName(service) + translation.openingSuffix
+      );
+
+      setTimeout(() => {
+        showView(service.view);
+      }, 600);
+    }
+
+    function initChat() {
+      chatBox.innerHTML = "";
+
+      t().greeting.forEach((line, index) => {
+        setTimeout(() => {
+          addMsg("assistant", line);
+        }, index * 250);
       });
-      wrap.appendChild(btn);
-    });
 
-    chatBox.appendChild(wrap);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  function handleUserMessage(text) {
-    const low = text.toLowerCase().trim();
-
-    if (low === '1' || low.includes('search') || low.includes('is-') || low.includes('is code') || low.includes('code')) {
-      openService('search');
-      return;
-    }
-    if (low === '2' || low.includes('verify') || low.includes('hallmark') || low.includes('isi')) {
-      openService('verify');
-      return;
-    }
-    if (low === '3' || low.includes('complaint') || low.includes('consumer')) {
-      openService('complaints');
-      return;
-    }
-    if (low === '4' || low.includes('manufacturer') || low.includes('help')) {
-      openService('manufacturer');
-      return;
+      setTimeout(renderQuickReplies, t().greeting.length * 250);
     }
 
-    addMsg('assistant', t().fallback);
-  }
+    function renderQuickReplies() {
+      const wrapper = document.createElement("div");
+      wrapper.className = "quick-replies";
 
-  function sendChat() {
-    const val = chatInput.value.trim();
-    if (!val) return;
+      Object.keys(serviceMap).forEach((key, index) => {
+        const service = serviceMap[key];
+        const button = document.createElement("button");
 
-    addMsg('user', val);
-    chatInput.value = '';
+        button.className = "quick-reply-btn";
+        button.textContent = (index + 1) + ". " + serviceName(service);
 
-    setTimeout(() => {
-      handleUserMessage(val);
-    }, 300);
-  }
+        button.addEventListener("click", () => {
+          Array.from(wrapper.querySelectorAll("button")).forEach((item) => {
+            item.disabled = true;
+          });
 
-  document.getElementById('chat-send').addEventListener('click', sendChat);
-  chatInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') sendChat();
-  });
+          addMsg("user", button.textContent);
 
-  // ---------- IS-Code Search (previously had no handler at all) ----------
-  const searchBox = document.getElementById('search-chat-box');
-  const searchInput = document.getElementById('search-input');
+          setTimeout(() => {
+            openService(key);
+          }, 300);
+        });
 
-  // Small illustrative keyword -> Indian Standard lookup table.
-  const isCodeDB = [
-    { keywords: ['led', 'bulb', 'light'], code: 'IS 16102 (Part 2)', title: 'LED Lamps — Performance Requirements', category: 'Electrical & Lighting' },
-    { keywords: ['helmet'], code: 'IS 4151', title: 'Protective Helmets for Two-Wheeler Riders', category: 'Safety Equipment' },
-    { keywords: ['cement'], code: 'IS 269', title: 'Ordinary Portland Cement — Specification', category: 'Construction Materials' },
-    { keywords: ['water', 'drinking water', 'bottle'], code: 'IS 14543', title: 'Packaged Drinking Water — Specification', category: 'Food & Beverage' },
-    { keywords: ['toy'], code: 'IS 9873', title: 'Safety of Toys', category: 'Consumer Products' },
-    { keywords: ['cable', 'wire'], code: 'IS 694', title: 'PVC Insulated Cables for Electrical Wiring', category: 'Electrical & Lighting' },
-    { keywords: ['pressure cooker', 'cooker'], code: 'IS 2347', title: 'Aluminium Pressure Cookers', category: 'Household Appliances' },
-    { keywords: ['footwear', 'shoe'], code: 'IS 15298', title: 'Footwear — General Requirements', category: 'Consumer Products' },
-    { keywords: ['switch', 'socket', 'plug'], code: 'IS 3854', title: 'Switches for Household Electrical Installations', category: 'Electrical & Lighting' },
-    { keywords: ['steel', 'tmt', 'bar'], code: 'IS 1786', title: 'High Strength Deformed Steel Bars (TMT)', category: 'Construction Materials' }
-  ];
+        wrapper.appendChild(button);
+      });
 
-  function findIsCode(text) {
-    const t = text.toLowerCase();
-    return isCodeDB.find(entry => entry.keywords.some(k => t.includes(k)));
-  }
+      chatBox.appendChild(wrapper);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-  function sendSearch() {
-    const val = searchInput.value.trim();
-    if (!val) return;
+    function handleUserMessage(text) {
+      const low = text.toLowerCase().trim();
 
-    addMsg('user', val, searchBox);
-    searchInput.value = '';
-
-    setTimeout(() => {
-      const match = findIsCode(val);
-      if (match) {
-        addMsg('assistant',
-          'Applicable Indian Standard: ' + match.code + '\n' +
-          match.title + '\n' +
-          'Category: ' + match.category + '\n\n' +
-          'This is an illustrative match — confirm the exact standard with your nearest BIS branch office or at bis.gov.in.',
-          searchBox);
-      } else {
-        addMsg('assistant',
-          "I couldn't find an exact match. Try a more specific keyword (e.g. 'LED bulb', 'helmet', 'cement', 'drinking water bottle'), or check the full product list at bis.gov.in.",
-          searchBox);
+      if (
+        low === "1" ||
+        low.includes("search") ||
+        low.includes("is-") ||
+        low.includes("is code") ||
+        low.includes("code")
+      ) {
+        openService("search");
+        return;
       }
-    }, 400);
-  }
 
-  document.getElementById('search-send').addEventListener('click', sendSearch);
-  searchInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') sendSearch();
-  });
+      if (
+        low === "2" ||
+        low.includes("verify") ||
+        low.includes("hallmark") ||
+        low.includes("isi")
+      ) {
+        openService("verify");
+        return;
+      }
 
-  // ---------- Verify demo ----------
-  document.getElementById('verify-btn').addEventListener('click', () => {
-    const val = document.getElementById('verify-input').value.trim();
-    document.getElementById('verify-result').style.display = val ? 'block' : 'none';
-  });
+      if (
+        low === "3" ||
+        low.includes("complaint") ||
+        low.includes("consumer")
+      ) {
+        openService("complaints");
+        return;
+      }
 
-  // ---------- Complaint demo ----------
-  document.getElementById('complaint-submit').addEventListener('click', () => {
-    const trackId = 'BIS-CMP-' + Math.floor(100000 + Math.random() * 900000);
-    document.getElementById('complaint-form').style.display = 'none';
-    const result = document.getElementById('complaint-result');
-    result.innerHTML = '<div class="title">✅ Complaint submitted</div><div style="margin-top:4px; color:#166534;">Tracking ID: ' + trackId + '</div>';
-    result.style.display = 'block';
-  });
+      if (
+        low === "4" ||
+        low.includes("manufacturer") ||
+        low.includes("help")
+      ) {
+        openService("manufacturer");
+        return;
+      }
 
-  // ---------- Manufacturer Help scheme cards (previously had no handler at all) ----------
-  const schemeSteps = {
-    'ISI Mark (Scheme I)': [
-      'Identify the applicable Indian Standard for your product.',
-      'Apply to the nearest BIS branch office with your application and test reports.',
-      'BIS reviews the documents and schedules a factory audit.',
-      'Samples are tested at a BIS-recognised or in-house lab.',
-      'On successful audit and testing, a licence to use the ISI mark is granted.'
-    ],
-    'CRS (Scheme II)': [
-      'Check if your electronics/IT product falls under the Compulsory Registration Order.',
-      'Get the product tested at a BIS-recognised lab.',
-      'Submit a registration application online via the BIS CRS portal.',
-      'BIS reviews the test report and application.',
-      'On approval, register and affix the Standard Mark before sale.'
-    ],
-    'FMCS': [
-      'Confirm your product category is covered under the Foreign Manufacturers Certification Scheme.',
-      'Submit an application along with test reports from a BIS-recognised lab.',
-      'BIS may conduct a factory inspection at the overseas manufacturing unit.',
-      'On successful review, a licence is granted to the foreign manufacturer.',
-      'Renew the licence periodically as per BIS guidelines.'
-    ],
-    'ECO Mark': [
-      'Check the specific Indian Standard and environmental criteria for your product category.',
-      'Apply to BIS with product and environmental test reports.',
-      'BIS verifies compliance with the environment-friendliness criteria.',
-      'On approval, a licence to use the ECO Mark is granted alongside the applicable quality standard.'
-    ]
-  };
-
-  document.querySelectorAll('.scheme-card').forEach(card => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.scheme-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-
-      const name = card.getAttribute('data-scheme');
-      const steps = schemeSteps[name] || [];
-      const detail = document.getElementById('scheme-detail');
-      detail.innerHTML =
-        '<div class="title">' + name + ' — Step-by-step process</div>' +
-        '<ol>' + steps.map(s => '<li>' + s + '</li>').join('') + '</ol>';
-      detail.style.display = 'block';
-    });
-  });
-
-  // ---------- Footer links (previously had no handler at all) ----------
-  const modalContent = {
-    about: {
-      title: 'About Us',
-      body: 'BIS Saathi is a demo assistant built for the Bureau of Indian Standards to help manufacturers and consumers navigate BIS certification, IS codes, and consumer complaints in their preferred language.'
-    },
-    privacy: {
-      title: 'Privacy Policy',
-      body: 'This is a prototype application. No personal data entered here is stored or shared with third parties. For the official BIS privacy policy, visit bis.gov.in.'
-    },
-    contact: {
-      title: 'Contact',
-      body: 'For official BIS queries, contact the BIS Care helpline or visit your nearest BIS branch office. Website: bis.gov.in'
+      addMsg("assistant", t().fallback);
     }
-  };
 
-  const modalOverlay = document.getElementById('modal-overlay');
+    function sendChat() {
+      const value = chatInput.value.trim();
 
-  function openModal(key) {
-    const c = modalContent[key];
-    document.getElementById('modal-title').textContent = c.title;
-    document.getElementById('modal-body').textContent = c.body;
-    modalOverlay.classList.add('show');
-  }
-  function closeModal() {
-    modalOverlay.classList.remove('show');
-  }
+      if (!value) {
+        return;
+      }
 
-  document.getElementById('footer-about').addEventListener('click', () => openModal('about'));
-  document.getElementById('footer-privacy').addEventListener('click', () => openModal('privacy'));
-  document.getElementById('footer-contact').addEventListener('click', () => openModal('contact'));
-  document.getElementById('modal-close').addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', e => {
-    if (e.target.id === 'modal-overlay') closeModal();
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-  });
-</script>
+      addMsg("user", value);
+      chatInput.value = "";
 
+      setTimeout(() => {
+        handleUserMessage(value);
+      }, 300);
+    }
+
+    document.getElementById("chat-send").addEventListener("click", sendChat);
+
+    chatInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        sendChat();
+      }
+    });
+
+    const searchBox = document.getElementById("search-chat-box");
+    const searchInput = document.getElementById("search-input");
+
+    const isCodeDB = [
+      {
+        keywords: ["led", "bulb", "light"],
+        code: "IS 16102 (Part 2)",
+        title: "LED Lamps — Performance Requirements",
+        category: "Electrical & Lighting"
+      },
+      {
+        keywords: ["helmet"],
+        code: "IS 4151",
+        title: "Protective Helmets for Two-Wheeler Riders",
+        category: "Safety Equipment"
+      },
+      {
+        keywords: ["cement"],
+        code: "IS 269",
+        title: "Ordinary Portland Cement — Specification",
+        category: "Construction Materials"
+      },
+      {
+        keywords: ["water", "drinking water", "bottle"],
+        code: "IS 14543",
+        title: "Packaged Drinking Water — Specification",
+        category: "Food & Beverage"
+      },
+      {
+        keywords: ["toy"],
+        code: "IS 9873",
+        title: "Safety of Toys",
+        category: "Consumer Products"
+      },
+      {
+        keywords: ["cable", "wire"],
+        code: "IS 694",
+        title: "PVC Insulated Cables for Electrical Wiring",
+        category: "Electrical & Lighting"
+      },
+      {
+        keywords: ["pressure cooker", "cooker"],
+        code: "IS 2347",
+        title: "Aluminium Pressure Cookers",
+        category: "Household Appliances"
+      },
+      {
+        keywords: ["footwear", "shoe"],
+        code: "IS 15298",
+        title: "Footwear — General Requirements",
+        category: "Consumer Products"
+      },
+      {
+        keywords: ["switch", "socket", "plug"],
+        code: "IS 3854",
+        title: "Switches for Household Electrical Installations",
+        category: "Electrical & Lighting"
+      },
+      {
+        keywords: ["steel", "tmt", "bar"],
+        code: "IS 1786",
+        title: "High Strength Deformed Steel Bars (TMT)",
+        category: "Construction Materials"
+      }
+    ];
+
+    function findIsCode(text) {
+      const lowerText = text.toLowerCase();
+
+      return isCodeDB.find((entry) => {
+        return entry.keywords.some((keyword) => lowerText.includes(keyword));
+      });
+    }
+
+    function sendSearch() {
+      const value = searchInput.value.trim();
+
+      if (!value) {
+        return;
+      }
+
+      addMsg("user", value, searchBox);
+      searchInput.value = "";
+
+      setTimeout(() => {
+        const match = findIsCode(value);
+
+        if (match) {
+          addMsg(
+            "assistant",
+            "Applicable Indian Standard: " + match.code + "\n" +
+            match.title + "\n" +
+            "Category: " + match.category + "\n\n" +
+            "This is an illustrative match — confirm the exact standard with your nearest BIS branch office or at bis.gov.in.",
+            searchBox
+          );
+        } else {
+          addMsg(
+            "assistant",
+            "I couldn't find an exact match. Try a more specific keyword such as LED bulb, helmet, cement, or drinking water bottle. You can also check the full product list at bis.gov.in.",
+            searchBox
+          );
+        }
+      }, 400);
+    }
+
+    document.getElementById("search-send").addEventListener("click", sendSearch);
+
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        sendSearch();
+      }
+    });
+
+    document.getElementById("verify-btn").addEventListener("click", () => {
+      const value = document.getElementById("verify-input").value.trim();
+
+      document.getElementById("verify-result").style.display =
+        value ? "block" : "none";
+    });
+
+    document.getElementById("complaint-submit").addEventListener("click", () => {
+      const trackingId = "BIS-CMP-" + Math.floor(100000 + Math.random() * 900000);
+
+      document.getElementById("complaint-form").style.display = "none";
+
+      const result = document.getElementById("complaint-result");
+
+      result.innerHTML =
+        '<div class="title">✅ Complaint submitted</div>' +
+        '<div style="margin-top:4px; color:#166534;">Tracking ID: ' +
+        trackingId +
+        "</div>";
+
+      result.style.display = "block";
+    });
+
+    const schemeSteps = {
+      "ISI Mark (Scheme I)": [
+        "Identify the applicable Indian Standard for your product.",
+        "Apply to the nearest BIS branch office with your application and test reports.",
+        "BIS reviews the documents and schedules a factory audit.",
+        "Samples are tested at a BIS-recognised or in-house lab.",
+        "On successful audit and testing, a licence to use the ISI mark is granted."
+      ],
+
+      "CRS (Scheme II)": [
+        "Check if your electronics or IT product falls under the Compulsory Registration Order.",
+        "Get the product tested at a BIS-recognised lab.",
+        "Submit a registration application online via the BIS CRS portal.",
+        "BIS reviews the test report and application.",
+        "On approval, register and affix the Standard Mark before sale."
+      ],
+
+      "FMCS": [
+        "Confirm your product category is covered under the Foreign Manufacturers Certification Scheme.",
+        "Submit an application along with test reports from a BIS-recognised lab.",
+        "BIS may conduct a factory inspection at the overseas manufacturing unit.",
+        "On successful review, a licence is granted to the foreign manufacturer.",
+        "Renew the licence periodically as per BIS guidelines."
+      ],
+
+      "ECO Mark": [
+        "Check the specific Indian Standard and environmental criteria for your product category.",
+        "Apply to BIS with product and environmental test reports.",
+        "BIS verifies compliance with the environment-friendliness criteria.",
+        "On approval, a licence to use the ECO Mark is granted alongside the applicable quality standard."
+      ]
+    };
+
+    document.querySelectorAll(".scheme-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        document.querySelectorAll(".scheme-card").forEach((item) => {
+          item.classList.remove("selected");
+        });
+
+        card.classList.add("selected");
+
+        const name = card.getAttribute("data-scheme");
+        const steps = schemeSteps[name] || [];
+        const detail = document.getElementById("scheme-detail");
+
+        detail.innerHTML =
+          '<div class="title">' + name + " — Step-by-step process</div>" +
+          "<ol>" +
+          steps.map((step) => "<li>" + step + "</li>").join("") +
+          "</ol>";
+
+        detail.style.display = "block";
+      });
+    });
+
+    const modalContent = {
+      about: {
+        title: "About Us",
+        body: "BIS Saathi is a demo assistant built for the Bureau of Indian Standards to help manufacturers and consumers navigate BIS certification, IS codes, and consumer complaints in their preferred language."
+      },
+
+      privacy: {
+        title: "Privacy Policy",
+        body: "This is a prototype application. No personal data entered here is stored or shared with third parties. For the official BIS privacy policy, visit bis.gov.in."
+      },
+
+      contact: {
+        title: "Contact",
+        body: "For official BIS queries, contact the BIS Care helpline or visit your nearest BIS branch office. Website: bis.gov.in"
+      }
+    };
+
+    const modalOverlay = document.getElementById("modal-overlay");
+
+    function openModal(key) {
+      const content = modalContent[key];
+
+      document.getElementById("modal-title").textContent = content.title;
+      document.getElementById("modal-body").textContent = content.body;
+
+      modalOverlay.classList.add("show");
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove("show");
+    }
+
+    document.getElementById("footer-about").addEventListener("click", () => {
+      openModal("about");
+    });
+
+    document.getElementById("footer-privacy").addEventListener("click", () => {
+      openModal("privacy");
+    });
+
+    document.getElementById("footer-contact").addEventListener("click", () => {
+      openModal("contact");
+    });
+
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+
+    modalOverlay.addEventListener("click", (event) => {
+      if (event.target.id === "modal-overlay") {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    });
+  </script>
 </body>
 </html>

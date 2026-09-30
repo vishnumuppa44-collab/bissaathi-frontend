@@ -28,34 +28,15 @@ body {
   color: var(--text);
   overflow-x: hidden;
 
-  background:
-    radial-gradient(
-      circle at 50% 38%,
-      rgba(255, 255, 255, 0.95) 0 20%,
-      transparent 48%
-    ),
-    linear-gradient(
-      180deg,
-      #dcefff 0%,
-      #eef7ff 32%,
-      #fff4df 62%,
-      #f5fbff 100%
-    );
+  background-image: url("assets/images/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  inset: 90px 0 68px;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.42;
-
-  background:
-    radial-gradient(ellipse at 13% 25%, #ffffff 0 7%, transparent 7.5%),
-    radial-gradient(ellipse at 20% 22%, #ffffff 0 5%, transparent 5.5%),
-    radial-gradient(ellipse at 84% 23%, #ffffff 0 7%, transparent 7.5%),
-    radial-gradient(ellipse at 90% 27%, #ffffff 0 5%, transparent 5.5%);
+  content: none;
 }
 
 button,

@@ -47,8 +47,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 16px;
-    
+        padding: 24px 16px;
+
+    background-image: url("assets/images/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
     position: relative;
     overflow-x: hidden;
@@ -79,7 +83,7 @@
     z-index: 10;
     width: 100%;
     max-width: 1060px;
-    background: #ffffff;
+        background: rgba(255, 255, 255, 0.75);
     border-radius: var(--radius-lg);
     border: 1px solid rgba(226, 232, 240, 0.9);
     box-shadow: var(--shadow-lg);
@@ -102,7 +106,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px 28px;
-    background: #ffffff;
+        background: rgba(255, 255, 255, 0.75);
     border-bottom: 1px solid var(--gray-200);
     gap: 16px;
   }
@@ -274,9 +278,10 @@
     min-height: 520px;
     display: flex;
     flex-direction: column;
-    padding: 28px 24px;
-    background: #ffffff;
+        padding: 28px 24px;
+    background: transparent;
   }
+  
 
   .view-pane {
     display: none;
@@ -298,7 +303,7 @@
   .lang-hero-card {
     position: relative;
     border-radius: var(--radius-md);
-    background: linear-gradient(180deg, #eaf3ff 0%, #f4f8fe 50%, #fff7ed 100%);
+        background: rgba(255, 255, 255, 0.55);
     border: 1px solid #dbeafe;
     padding: 34px 28px 28px;
     overflow: hidden;

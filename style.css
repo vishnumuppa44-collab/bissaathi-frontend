@@ -28,21 +28,12 @@ body {
   color: var(--text);
   overflow-x: hidden;
 
-  background:
-    radial-gradient(
-      circle at 50% 38%,
-      rgba(255, 255, 255, 0.95) 0 20%,
-      transparent 48%
-    ),
-    linear-gradient(
-      180deg,
-      #dcefff 0%,
-      #eef7ff 32%,
-      #fff4df 62%,
-      #f5fbff 100%
-    );
+  background-image: url("assets/images/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
-
 body::before {
   content: "";
   position: fixed;

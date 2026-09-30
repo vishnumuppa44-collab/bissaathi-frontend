@@ -1060,6 +1060,52 @@
       grid-template-columns: 1fr;
     }
   }
+    /* ===== SHOW BACKGROUND IMAGE, APP FLOATS OVER IT ===== */
+  body {
+    background-image: url("assets/images/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .app {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .tricolor-stripe {
+    display: none;
+  }
+
+  header {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: var(--radius-lg);
+    margin-bottom: 14px;
+  }
+
+  nav.main-tabs {
+    background: transparent;
+    border-bottom: none;
+  }
+
+  main {
+    background: transparent;
+  }
+
+  .lang-hero-card {
+    background: rgba(255, 255, 255, 0.78);
+  }
+
+  footer {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: var(--radius-lg);
+    margin-top: 14px;
+  }
 </style>
 </head>
 <body>

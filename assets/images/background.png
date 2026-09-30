@@ -1,13 +1,6 @@
 body {
-  background:
-    linear-gradient(
-      rgba(235, 246, 255, 0.72),
-      rgba(255, 244, 223, 0.72)
-    ),
-    url("assets/images/background.png");
-
+  background-image: url("background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
 }

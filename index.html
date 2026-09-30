@@ -1062,11 +1062,18 @@
   }
     /* ===== SHOW BACKGROUND IMAGE, APP FLOATS OVER IT ===== */
   body {
-    background-image: url("assets/images/bg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-color: #dcefff;
+    background-image: none;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 1;
+    pointer-events: none;
+    background: url("assets/images/bg.jpg") center / cover no-repeat;
   }
 
   .app {

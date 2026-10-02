@@ -749,17 +749,22 @@ function showView(viewId) {
 }
 
 function getLanguageViewId() {
-  const card = document.querySelector(".lang-card");
-  const view = card ? card.closest(".view") : null;
-  return view ? view.id : "view-language";
+  return "view-language";
 }
 
 function addMessage(role, text, container = chatBox) {
+  if (!container) {
+    return;
+  }
+
   const message = document.createElement("div");
 
-  message.className = `msg ${role}`;
+  message.className = role === "assistant"
+    ? "chat-msg bot"
+    : "chat-msg user";
+
   message.textContent = text;
-  message.style.whiteSpace = "pre-line";
+  message.style.whiteSpace = "pre-wrap";
 
   container.appendChild(message);
   container.scrollTop = container.scrollHeight;
@@ -781,7 +786,7 @@ function escapeHtml(value) {
    ========================================================= */
 
 function updateContinueLabel() {
-  const continueSub = document.getElementById("continue-sub");
+  const continueSub = document.getElementById("continueSubLabel");
 
   if (!continueSub) {
     return;
@@ -789,13 +794,9 @@ function updateContinueLabel() {
 
   const translatedText = getTranslation().continueSub;
 
-  if (translatedText === "") {
-    continueSub.style.display = "none";
-    return;
-  }
-
-  continueSub.style.display = "inline";
-  continueSub.textContent = `/ ${translatedText}`;
+  continueSub.textContent = translatedText
+    ? `/ ${translatedText}`
+    : "";
 }
 
 // Translates static page text. Any element in index.html with
@@ -815,17 +816,11 @@ function applyStaticText() {
 }
 
 function setupLanguageCards() {
-  const languageCards = document.querySelectorAll(".lang-card");
-  const preselected = document.querySelector(".lang-card.selected");
+  const languageCards = document.querySelectorAll(".lang-tile");
+  const preselected = document.querySelector(".lang-tile.selected");
 
   if (preselected && preselected.dataset.lang) {
     selectedLanguage = preselected.dataset.lang;
-  } else {
-    languageCards.forEach((card) => {
-      if (card.dataset.lang === selectedLanguage) {
-        card.classList.add("selected");
-      }
-    });
   }
 
   languageCards.forEach((card) => {
@@ -835,7 +830,8 @@ function setupLanguageCards() {
       });
 
       card.classList.add("selected");
-      selectedLanguage = card.dataset.lang;
+      selectedLanguage = card.dataset.lang || "en";
+
       updateContinueLabel();
       applyStaticText();
     });
@@ -1058,23 +1054,64 @@ function sendSearchMessage() {
    ========================================================= */
 
 function verifyLicense() {
-  const input = document.getElementById("verify-input");
-  const resultBox = document.getElementById("verify-result");
-  const value = input.value.trim();
+  const input = document.getElementById("verifyInput");
+  const resultBox = document.getElementById("verificationResultCard");
 
-  resultBox.classList.remove("error");
-  resultBox.style.display = "block";
+  const badge = document.getElementById("verifyBadge");
+  const manufacturer = document.getElementById("valManufacturer");
+  const category = document.getElementById("valCategory");
+  const standard = document.getElementById("valStandard");
+  const scheme = document.getElementById("valScheme");
+  const location = document.getElementById("valLocation");
+  const validity = document.getElementById("valValidity");
 
-  if (!value) {
-    resultBox.classList.add("error");
-    resultBox.innerHTML = `<div class="title">${escapeHtml(t("verifyEmpty"))}</div>`;
+  if (!input || !resultBox) {
     return;
   }
 
-  resultBox.innerHTML =
-    `<div class="title">${escapeHtml(t("verifyTitle"))}</div>` +
-    `<div style="margin-top: 6px;">${escapeHtml(t("verifyEntered"))} <strong>${escapeHtml(value)}</strong></div>` +
-    `<div style="margin-top: 6px;">${escapeHtml(t("verifyNote"))}</div>`;
+  const value = input.value.trim();
+
+  resultBox.style.display = "block";
+
+  if (!value) {
+    resultBox.classList.add("invalid");
+
+    if (badge) {
+      badge.textContent = t("verifyEmpty");
+    }
+
+    return;
+  }
+
+  resultBox.classList.remove("invalid");
+
+  if (badge) {
+    badge.textContent = t("verifyTitle");
+  }
+
+  if (manufacturer) {
+    manufacturer.textContent = value;
+  }
+
+  if (category) {
+    category.textContent = t("verifyEntered");
+  }
+
+  if (standard) {
+    standard.textContent = "Demo frontend verification";
+  }
+
+  if (scheme) {
+    scheme.textContent = "BIS / Hallmark verification demo";
+  }
+
+  if (location) {
+    location.textContent = "Not connected to an official BIS database";
+  }
+
+  if (validity) {
+    validity.textContent = t("verifyNote");
+  }
 }
 
 
@@ -1082,34 +1119,62 @@ function verifyLicense() {
    11. COMPLAINT FEATURE
    ========================================================= */
 
-function submitComplaint(event) {
-  event.preventDefault();
+function submitComplaint() {
+  const productInput = document.getElementById("compProductName");
+  const issueInput = document.getElementById("compIssueCategory");
+  const descriptionInput = document.getElementById("compDescription");
+  const locationInput = document.getElementById("compLocation");
 
-  const product = document.getElementById("complaint-product").value.trim();
-  const issue = document.getElementById("complaint-issue").value;
-  const description = document.getElementById("complaint-desc").value.trim();
-  const resultBox = document.getElementById("complaint-result");
+  const statusCard = document.getElementById("complaintStatusCard");
+  const statusTitle = document.getElementById("compStatusTitle");
+  const statusBody = document.getElementById("compStatusBody");
+  const reference = document.getElementById("compRefId");
+  const trackInput = document.getElementById("trackInput");
+
+  if (!productInput || !descriptionInput) {
+    return;
+  }
+
+  const product = productInput.value.trim();
+  const description = descriptionInput.value.trim();
 
   if (!product || !description) {
-    resultBox.classList.add("error");
-    resultBox.style.display = "block";
-    resultBox.innerHTML = `<div class="title">${escapeHtml(t("complaintEmpty"))}</div>`;
+    alert(t("complaintEmpty"));
     return;
   }
 
   const trackingId = `BIS-CMP-${Math.floor(100000 + Math.random() * 900000)}`;
 
-  resultBox.classList.remove("error");
-  resultBox.style.display = "block";
+  if (statusCard) {
+    statusCard.style.display = "block";
+  }
 
-  resultBox.innerHTML =
-    `<div class="title">${escapeHtml(t("complaintCreated"))}</div>` +
-    `<div style="margin-top: 6px;">${escapeHtml(t("tracking"))} <strong>${trackingId}</strong></div>` +
-    `<div style="margin-top: 6px;">${escapeHtml(t("product"))} ${escapeHtml(product)}</div>` +
-    `<div>${escapeHtml(t("issue"))} ${escapeHtml(issue)}</div>` +
-    `<div style="margin-top: 8px;">${escapeHtml(t("complaintNote"))}</div>`;
+  if (statusTitle) {
+    statusTitle.textContent = t("complaintCreated");
+  }
 
-  document.getElementById("complaint-form").reset();
+  if (reference) {
+    reference.textContent = trackingId;
+  }
+
+  if (statusBody) {
+    statusBody.innerHTML =
+      `${escapeHtml(t("tracking"))} <strong>${trackingId}</strong><br>` +
+      `${escapeHtml(t("product"))} ${escapeHtml(product)}<br>` +
+      `${escapeHtml(t("issue"))} ${escapeHtml(issueInput ? issueInput.value : "")}<br>` +
+      `${escapeHtml(t("complaintNote"))}`;
+  }
+
+  if (trackInput) {
+    trackInput.value = trackingId;
+  }
+
+  productInput.value = "";
+  descriptionInput.value = "";
+
+  if (locationInput) {
+    locationInput.value = "";
+  }
 }
 
 
@@ -1118,30 +1183,53 @@ function submitComplaint(event) {
    ========================================================= */
 
 function setupSchemeCards() {
-  const schemeCards = document.querySelectorAll(".scheme-card");
-  const detailBox = document.getElementById("scheme-detail");
+  const schemeCards = document.querySelectorAll(".scheme-select-card");
+
+  const title = document.getElementById("schemeProcessTitle");
+  const subtitle = document.getElementById("schemeProcessSubtitle");
+  const stepsContainer = document.getElementById("schemeStepsContainer");
+
+  const schemeNameMap = {
+    scheme1: "ISI Mark (Scheme I)",
+    scheme2: "CRS (Scheme II)",
+    fmcs: "FMCS",
+    ecomark: "ECO Mark"
+  };
 
   schemeCards.forEach((card) => {
     card.addEventListener("click", () => {
       schemeCards.forEach((item) => {
-        item.classList.remove("selected");
+        item.classList.remove("active");
       });
 
-      card.classList.add("selected");
+      card.classList.add("active");
 
-      const schemeName = card.dataset.scheme;
-      const byLang = schemeSteps[schemeName] || {};
-      const steps = byLang[selectedLanguage] || byLang.en || [];
+      const schemeName = schemeNameMap[card.dataset.scheme];
+      const byLanguage = schemeSteps[schemeName] || {};
+      const steps = byLanguage[selectedLanguage] || byLanguage.en || [];
 
-      const stepsHtml = steps
-        .map((step) => `<li>${escapeHtml(step)}</li>`)
-        .join("");
+      if (title) {
+        title.textContent = schemeName || "Certification Roadmap";
+      }
 
-      detailBox.innerHTML =
-        `<div class="title">${escapeHtml(schemeName)} — ${escapeHtml(t("stepsTitle"))}</div>` +
-        `<ol>${stepsHtml}</ol>`;
+      if (subtitle) {
+        subtitle.textContent = t("stepsTitle");
+      }
 
-      detailBox.style.display = "block";
+      if (stepsContainer) {
+        stepsContainer.innerHTML = steps
+          .map((step, index) => {
+            return `
+              <li class="process-step-item">
+                <div class="step-num-badge">${index + 1}</div>
+                <div class="step-content">
+                  <strong>${escapeHtml(step)}</strong>
+                </div>
+              </li>
+            `;
+          })
+          .join("");
+      }
     });
   });
 }
@@ -1156,16 +1244,27 @@ function openModal(key) {
     return;
   }
 
-  document.getElementById("modal-title").textContent = t(key);
-  document.getElementById("modal-body").textContent = t(`${key}Body`);
+  const title = document.getElementById("modalTitle");
+  const body = document.getElementById("modalBody");
 
-  modalOverlay.classList.add("show");
+  if (title) {
+    title.textContent = t(key);
+  }
+
+  if (body) {
+    body.textContent = t(`${key}Body`);
+  }
+
+  if (modalOverlay) {
+    modalOverlay.classList.add("open");
+  }
 }
 
 function closeModal() {
-  modalOverlay.classList.remove("show");
+  if (modalOverlay) {
+    modalOverlay.classList.remove("open");
+  }
 }
-
 
 /* =========================================================
    14. EVENT LISTENERS
@@ -1272,64 +1371,6 @@ function setupEventListeners() {
     }
   });
 }
-
-  chatInput.addEventListener("keydown", (event) => {
-    if (isPlainEnter(event)) {
-      event.preventDefault();
-      sendChatMessage();
-    }
-  });
-
-  document.getElementById("search-send").addEventListener("click", sendSearchMessage);
-
-  searchInput.addEventListener("keydown", (event) => {
-    if (isPlainEnter(event)) {
-      event.preventDefault();
-      sendSearchMessage();
-    }
-  });
-
-  document.getElementById("verify-btn").addEventListener("click", verifyLicense);
-
-  document
-    .getElementById("complaint-form")
-    .addEventListener("submit", submitComplaint);
-
-  document.getElementById("mic-btn").addEventListener("click", () => {
-    alert(t("voiceMsg"));
-  });
-
-  document.querySelectorAll(".back-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      showView(button.dataset.back);
-    });
-  });
-
-  document.getElementById("footer-about").addEventListener("click", () => {
-    openModal("about");
-  });
-
-  document.getElementById("footer-privacy").addEventListener("click", () => {
-    openModal("privacy");
-  });
-
-  document.getElementById("footer-contact").addEventListener("click", () => {
-    openModal("contact");
-  });
-
-  document.getElementById("modal-close").addEventListener("click", closeModal);
-
-  modalOverlay.addEventListener("click", (event) => {
-    if (event.target === modalOverlay) {
-      closeModal();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeModal();
-    }
-  });
 
 
 

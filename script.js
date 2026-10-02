@@ -705,10 +705,11 @@ let searchInput;
 let modalOverlay;
 
 function cacheDom() {
-  chatBox = document.getElementById("chatMessagesScroll");
-  chatInput = document.getElementById("chatSearchInput");
+  chatBox = document.getElementById("welcomeChatMessages");
 
-  searchBox = chatBox;
+  searchBox = document.getElementById("chatMessagesScroll");
+
+  chatInput = document.getElementById("chatSearchInput");
   searchInput = chatInput;
 
   modalOverlay = document.getElementById("modalBackdrop");
@@ -830,6 +831,7 @@ function setupLanguageCards() {
       });
 
       card.classList.add("selected");
+
       selectedLanguage = card.dataset.lang || "en";
 
       updateContinueLabel();
@@ -910,6 +912,11 @@ function initializeChat() {
   const runId = chatRunId;
 
   chatLanguage = selectedLanguage;
+  const welcomeText = document.getElementById("chatWelcomeText");
+
+if (welcomeText) {
+  welcomeText.textContent = getTranslation().greeting[2];
+}
   chatBox.innerHTML = "";
 
   // Old search messages were in the previous language; start clean.
@@ -1286,7 +1293,7 @@ function setupEventListeners() {
         initializeChat();
       }
 
-      showView("view-search");
+     showView("view-chat");
     });
   }
 

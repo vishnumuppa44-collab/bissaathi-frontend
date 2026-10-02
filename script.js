@@ -836,10 +836,10 @@ function setupLanguageCards() {
 
       updateContinueLabel();
       applyStaticText();
+      addBackButtons();
     });
   });
 }
-
 
 /* =========================================================
    8. CHAT FUNCTIONS
@@ -1272,7 +1272,64 @@ function closeModal() {
     modalOverlay.classList.remove("open");
   }
 }
+function addBackButtons() {
+  const backLabels = {
+    en: "← Back",
+    hi: "← वापस",
+    ta: "← பின்செல்",
+    bn: "← পিছনে",
+    te: "← వెనుకకు",
+    mr: "← मागे",
+    gu: "← પાછળ",
+    kn: "← ಹಿಂದೆ"
+  };
 
+  const views = [
+    "view-chat",
+    "view-verify",
+    "view-search",
+    "view-complaints",
+    "view-manufacturer"
+  ];
+
+  views.forEach((viewId) => {
+    const view = document.getElementById(viewId);
+
+    if (!view) {
+      return;
+    }
+
+    let backButton = view.querySelector(".back-btn");
+
+    if (!backButton) {
+      backButton = document.createElement("button");
+
+      backButton.type = "button";
+      backButton.className = "back-btn";
+
+      backButton.style.marginBottom = "18px";
+      backButton.style.padding = "9px 14px";
+      backButton.style.border = "1px solid #bfdbfe";
+      backButton.style.borderRadius = "10px";
+      backButton.style.background = "#eff6ff";
+      backButton.style.color = "#102f68";
+      backButton.style.fontWeight = "700";
+      backButton.style.cursor = "pointer";
+
+      view.prepend(backButton);
+    }
+
+    backButton.textContent = backLabels[selectedLanguage] || backLabels.en;
+
+    backButton.onclick = () => {
+      if (viewId === "view-chat") {
+        showView("view-language");
+      } else {
+        showView("view-chat");
+      }
+    };
+  });
+}
 /* =========================================================
    14. EVENT LISTENERS
    ========================================================= */
@@ -1390,6 +1447,7 @@ function startApp() {
   setupLanguageCards();
   updateContinueLabel();
   applyStaticText();
+  addBackButtons();
   setupSchemeCards();
   setupEventListeners();
 

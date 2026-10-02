@@ -705,11 +705,13 @@ let searchInput;
 let modalOverlay;
 
 function cacheDom() {
-  chatBox = document.getElementById("chat-box");
-  chatInput = document.getElementById("chat-input");
-  searchBox = document.getElementById("search-chat-box");
-  searchInput = document.getElementById("search-input");
-  modalOverlay = document.getElementById("modal-overlay");
+  chatBox = document.getElementById("chatMessagesScroll");
+  chatInput = document.getElementById("chatSearchInput");
+
+  searchBox = chatBox;
+  searchInput = chatInput;
+
+  modalOverlay = document.getElementById("modalBackdrop");
 }
 
 
@@ -734,12 +736,16 @@ function showView(viewId) {
     return;
   }
 
-  document.querySelectorAll(".view").forEach((view) => {
-    view.classList.remove("show");
+  document.querySelectorAll(".view-pane").forEach((view) => {
+    view.classList.remove("active");
   });
 
-  selectedView.classList.add("show");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  selectedView.classList.add("active");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 function getLanguageViewId() {
@@ -1166,16 +1172,106 @@ function closeModal() {
    ========================================================= */
 
 function setupEventListeners() {
-  document.getElementById("continue-btn").addEventListener("click", () => {
-    applyStaticText();
-    showView("view-chat");
+  const continueButton = document.getElementById("btnContinueLanguage");
+  const chatSendButton = document.getElementById("btnChatSend");
+  const verifyButton = document.getElementById("btnVerifyAction");
+  const complaintButton = document.getElementById("btnSubmitComplaint");
+  const trackButton = document.getElementById("btnTrackLookup");
+  const languageMicButton = document.getElementById("langVoiceBtn");
+  const chatMicButton = document.getElementById("chatMicBtn");
+  const modalCloseButton = document.getElementById("btnModalClose");
 
-    if (chatLanguage !== selectedLanguage) {
-      initializeChat();
-    }
+  if (continueButton) {
+    continueButton.addEventListener("click", () => {
+      if (chatLanguage !== selectedLanguage) {
+        initializeChat();
+      }
+
+      showView("view-search");
+    });
+  }
+
+  if (chatSendButton) {
+    chatSendButton.addEventListener("click", () => {
+      sendSearchMessage();
+    });
+  }
+
+  if (chatInput) {
+    chatInput.addEventListener("keydown", (event) => {
+      if (isPlainEnter(event)) {
+        event.preventDefault();
+        sendSearchMessage();
+      }
+    });
+  }
+
+  if (verifyButton) {
+    verifyButton.addEventListener("click", () => {
+      verifyLicense();
+    });
+  }
+
+  if (complaintButton) {
+    complaintButton.addEventListener("click", () => {
+      submitComplaint();
+    });
+  }
+
+  if (trackButton) {
+    trackButton.addEventListener("click", () => {
+      const trackInput = document.getElementById("trackInput");
+      const statusCard = document.getElementById("complaintStatusCard");
+
+      if (!trackInput || !trackInput.value.trim()) {
+        alert("Please enter a complaint reference ID.");
+        return;
+      }
+
+      if (statusCard) {
+        statusCard.style.display = "block";
+      }
+    });
+  }
+
+  if (languageMicButton) {
+    languageMicButton.addEventListener("click", () => {
+      alert(t("voiceMsg"));
+    });
+  }
+
+  if (chatMicButton) {
+    chatMicButton.addEventListener("click", () => {
+      alert(t("voiceMsg"));
+    });
+  }
+
+  document.querySelectorAll(".footer-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      openModal(button.dataset.modal);
+    });
   });
 
-  document.getElementById("chat-send").addEventListener("click", sendChatMessage);
+  if (modalCloseButton) {
+    modalCloseButton.addEventListener("click", () => {
+      closeModal();
+    });
+  }
+
+  if (modalOverlay) {
+    modalOverlay.addEventListener("click", (event) => {
+      if (event.target === modalOverlay) {
+        closeModal();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  });
+}
 
   chatInput.addEventListener("keydown", (event) => {
     if (isPlainEnter(event)) {

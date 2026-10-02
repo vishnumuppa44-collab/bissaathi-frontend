@@ -1,10 +1,17 @@
 "use strict";
 
+/* =========================================================
+   1. APPLICATION STATE
+   ========================================================= */
 
 let selectedLanguage = "hi";
 let chatLanguage = null;
 let chatRunId = 0;
 
+
+/* =========================================================
+   2. TRANSLATIONS – CHAT
+   ========================================================= */
 
 const translations = {
   en: {
@@ -693,13 +700,18 @@ const schemeSteps = {
 
 let chatBox;
 let chatInput;
+let searchBox;
+let searchInput;
 let modalOverlay;
 
 function cacheDom() {
-  chatBox = document.getElementById("chatMessagesScroll");
-  chatInput = document.getElementById("chatSearchInput");
-  modalOverlay = document.getElementById("modalBackdrop");
+  chatBox = document.getElementById("chat-box");
+  chatInput = document.getElementById("chat-input");
+  searchBox = document.getElementById("search-chat-box");
+  searchInput = document.getElementById("search-input");
+  modalOverlay = document.getElementById("modal-overlay");
 }
+
 
 /* =========================================================
    6. COMMON FUNCTIONS
@@ -709,6 +721,7 @@ function getTranslation() {
   return translations[selectedLanguage] || translations.en;
 }
 
+// Translated UI string for the selected language, falling back to English.
 function t(key) {
   const table = ui[selectedLanguage] || ui.en;
   return table[key] !== undefined ? table[key] : ui.en[key];
@@ -721,16 +734,29 @@ function showView(viewId) {
     return;
   }
 
-  document.querySelectorAll(".view-pane").forEach((view) => {
-    view.classList.remove("active");
+  document.querySelectorAll(".view").forEach((view) => {
+    view.classList.remove("show");
   });
 
-  selectedView.classList.add("active");
+  selectedView.classList.add("show");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function getLanguageViewId() {
-  return "view-language";
+  const card = document.querySelector(".lang-card");
+  const view = card ? card.closest(".view") : null;
+  return view ? view.id : "view-language";
+}
+
+function addMessage(role, text, container = chatBox) {
+  const message = document.createElement("div");
+
+  message.className = `msg ${role}`;
+  message.textContent = text;
+  message.style.whiteSpace = "pre-line";
+
+  container.appendChild(message);
+  container.scrollTop = container.scrollHeight;
 }
 
 function isPlainEnter(event) {
@@ -743,12 +769,13 @@ function escapeHtml(value) {
   return temporaryElement.innerHTML;
 }
 
+
 /* =========================================================
    7. LANGUAGE FUNCTIONS
    ========================================================= */
 
 function updateContinueLabel() {
-  const continueSub = document.getElementById("continueSubLabel");
+  const continueSub = document.getElementById("continue-sub");
 
   if (!continueSub) {
     return;
@@ -756,19 +783,43 @@ function updateContinueLabel() {
 
   const translatedText = getTranslation().continueSub;
 
-  continueSub.textContent = translatedText ? `/ ${translatedText}` : "";
+  if (translatedText === "") {
+    continueSub.style.display = "none";
+    return;
+  }
+
+  continueSub.style.display = "inline";
+  continueSub.textContent = `/ ${translatedText}`;
 }
 
+// Translates static page text. Any element in index.html with
+//   data-i18n="key"              -> its text is replaced
+//   data-i18n-placeholder="key"  -> its placeholder is replaced
+// is updated whenever the language changes.
 function applyStaticText() {
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+
   document.documentElement.lang = selectedLanguage;
 }
 
 function setupLanguageCards() {
-  const languageCards = document.querySelectorAll(".lang-tile");
-  const preselected = document.querySelector(".lang-tile.selected");
+  const languageCards = document.querySelectorAll(".lang-card");
+  const preselected = document.querySelector(".lang-card.selected");
 
   if (preselected && preselected.dataset.lang) {
     selectedLanguage = preselected.dataset.lang;
+  } else {
+    languageCards.forEach((card) => {
+      if (card.dataset.lang === selectedLanguage) {
+        card.classList.add("selected");
+      }
+    });
   }
 
   languageCards.forEach((card) => {
@@ -778,31 +829,17 @@ function setupLanguageCards() {
       });
 
       card.classList.add("selected");
-      selectedLanguage = card.dataset.lang || "en";
-
+      selectedLanguage = card.dataset.lang;
       updateContinueLabel();
       applyStaticText();
     });
   });
 }
 
+
 /* =========================================================
    8. CHAT FUNCTIONS
    ========================================================= */
-
-function addMessage(role, text, container = chatBox) {
-  if (!container) {
-    return;
-  }
-
-  const message = document.createElement("div");
-  message.className = `chat-msg ${role === "assistant" ? "bot" : "user"}`;
-  message.textContent = text;
-  message.style.whiteSpace = "pre-wrap";
-
-  container.appendChild(message);
-  container.scrollTop = container.scrollHeight;
-}
 
 function getServiceName(service) {
   return service.name[selectedLanguage] || service.name.en;
@@ -824,14 +861,10 @@ function openService(serviceKey) {
 
   setTimeout(() => {
     showView(service.view);
-  }, 500);
+  }, 700);
 }
 
 function renderQuickReplies() {
-  if (!chatBox) {
-    return;
-  }
-
   const wrapper = document.createElement("div");
   wrapper.className = "quick-replies";
 
@@ -840,11 +873,13 @@ function renderQuickReplies() {
     const service = serviceMap[serviceKey];
 
     button.type = "button";
-    button.className = "clickable-sample-pill";
+    button.className = "quick-reply-btn";
     button.textContent = `${index + 1}. ${getServiceName(service)}`;
 
     button.addEventListener("click", () => {
-      wrapper.querySelectorAll("button").forEach((item) => {
+      const buttons = wrapper.querySelectorAll("button");
+
+      buttons.forEach((item) => {
         item.disabled = true;
       });
 
@@ -853,6 +888,12 @@ function renderQuickReplies() {
       setTimeout(() => {
         openService(serviceKey);
       }, 300);
+
+      setTimeout(() => {
+        buttons.forEach((item) => {
+          item.disabled = false;
+        });
+      }, 1200);
     });
 
     wrapper.appendChild(button);
@@ -863,30 +904,33 @@ function renderQuickReplies() {
 }
 
 function initializeChat() {
-  if (!chatBox) {
-    return;
-  }
-
   chatRunId += 1;
   const runId = chatRunId;
 
   chatLanguage = selectedLanguage;
   chatBox.innerHTML = "";
 
+  // Old search messages were in the previous language; start clean.
+  if (searchBox) {
+    searchBox.innerHTML = "";
+  }
+
   const greeting = getTranslation().greeting;
 
   greeting.forEach((line, index) => {
     setTimeout(() => {
-      if (runId === chatRunId) {
-        addMessage("assistant", line);
+      if (runId !== chatRunId) {
+        return;
       }
+      addMessage("assistant", line);
     }, index * 300);
   });
 
   setTimeout(() => {
-    if (runId === chatRunId) {
-      renderQuickReplies();
+    if (runId !== chatRunId) {
+      return;
     }
+    renderQuickReplies();
   }, greeting.length * 300);
 }
 
@@ -932,10 +976,6 @@ function handleUserMessage(messageText) {
 }
 
 function sendChatMessage() {
-  if (!chatInput) {
-    return;
-  }
-
   const text = chatInput.value.trim();
 
   if (!text) {
@@ -949,6 +989,7 @@ function sendChatMessage() {
     handleUserMessage(text);
   }, 300);
 }
+
 
 /* =========================================================
    9. IS-CODE SEARCH
@@ -970,18 +1011,14 @@ function findIsCode(userText) {
 }
 
 function sendSearchMessage() {
-  if (!chatInput) {
-    return;
-  }
-
-  const text = chatInput.value.trim();
+  const text = searchInput.value.trim();
 
   if (!text) {
     return;
   }
 
-  addMessage("user", text);
-  chatInput.value = "";
+  addMessage("user", text, searchBox);
+  searchInput.value = "";
 
   setTimeout(() => {
     const match = findIsCode(text);
@@ -989,206 +1026,120 @@ function sendSearchMessage() {
     if (match) {
       const categoryText =
         (categoryNames[match.category] &&
-          (categoryNames[match.category][selectedLanguage] ||
-            categoryNames[match.category].en)) ||
+          (categoryNames[match.category][selectedLanguage] || categoryNames[match.category].en)) ||
         match.category;
 
       addMessage(
         "assistant",
         `${t("searchHeader")}\n\n` +
-          `${t("code")}: ${match.code}\n` +
-          `${t("title")}: ${match.title}\n` +
-          `${t("category")}: ${categoryText}\n\n` +
-          `${t("searchImportant")}`
+        `${t("code")}: ${match.code}\n` +
+        `${t("title")}: ${match.title}\n` +
+        `${t("category")}: ${categoryText}\n\n` +
+        `${t("searchImportant")}`,
+        searchBox
       );
 
       return;
     }
 
-    addMessage("assistant", t("searchNone"));
+    addMessage("assistant", t("searchNone"), searchBox);
   }, 400);
 }
+
 
 /* =========================================================
    10. VERIFY FEATURE
    ========================================================= */
 
 function verifyLicense() {
-  const input = document.getElementById("verifyInput");
-  const resultBox = document.getElementById("verificationResultCard");
-
-  if (!input || !resultBox) {
-    return;
-  }
-
+  const input = document.getElementById("verify-input");
+  const resultBox = document.getElementById("verify-result");
   const value = input.value.trim();
 
+  resultBox.classList.remove("error");
   resultBox.style.display = "block";
 
-  const badge = document.getElementById("verifyBadge");
-  const manufacturer = document.getElementById("valManufacturer");
-  const category = document.getElementById("valCategory");
-  const standard = document.getElementById("valStandard");
-  const scheme = document.getElementById("valScheme");
-  const location = document.getElementById("valLocation");
-  const validity = document.getElementById("valValidity");
-
   if (!value) {
-    resultBox.classList.add("invalid");
-
-    if (badge) {
-      badge.textContent = t("verifyEmpty");
-    }
-
+    resultBox.classList.add("error");
+    resultBox.innerHTML = `<div class="title">${escapeHtml(t("verifyEmpty"))}</div>`;
     return;
   }
 
-  resultBox.classList.remove("invalid");
-
-  if (badge) {
-    badge.textContent = t("verifyTitle");
-  }
-
-  if (manufacturer) {
-    manufacturer.textContent = value;
-  }
-
-  if (category) {
-    category.textContent = t("verifyEntered");
-  }
-
-  if (standard) {
-    standard.textContent = "Demo frontend verification";
-  }
-
-  if (scheme) {
-    scheme.textContent = "BIS / Hallmark verification demo";
-  }
-
-  if (location) {
-    location.textContent = "Not connected to an official database";
-  }
-
-  if (validity) {
-    validity.textContent = t("verifyNote");
-  }
+  resultBox.innerHTML =
+    `<div class="title">${escapeHtml(t("verifyTitle"))}</div>` +
+    `<div style="margin-top: 6px;">${escapeHtml(t("verifyEntered"))} <strong>${escapeHtml(value)}</strong></div>` +
+    `<div style="margin-top: 6px;">${escapeHtml(t("verifyNote"))}</div>`;
 }
+
 
 /* =========================================================
    11. COMPLAINT FEATURE
    ========================================================= */
 
-function submitComplaint() {
-  const productInput = document.getElementById("compProductName");
-  const issueInput = document.getElementById("compIssueCategory");
-  const descriptionInput = document.getElementById("compDescription");
-  const locationInput = document.getElementById("compLocation");
-  const statusCard = document.getElementById("complaintStatusCard");
-  const statusTitle = document.getElementById("compStatusTitle");
-  const statusBody = document.getElementById("compStatusBody");
-  const reference = document.getElementById("compRefId");
-  const trackInput = document.getElementById("trackInput");
+function submitComplaint(event) {
+  event.preventDefault();
 
-  if (!productInput || !descriptionInput) {
-    return;
-  }
-
-  const product = productInput.value.trim();
-  const description = descriptionInput.value.trim();
+  const product = document.getElementById("complaint-product").value.trim();
+  const issue = document.getElementById("complaint-issue").value;
+  const description = document.getElementById("complaint-desc").value.trim();
+  const resultBox = document.getElementById("complaint-result");
 
   if (!product || !description) {
-    alert(t("complaintEmpty"));
+    resultBox.classList.add("error");
+    resultBox.style.display = "block";
+    resultBox.innerHTML = `<div class="title">${escapeHtml(t("complaintEmpty"))}</div>`;
     return;
   }
 
   const trackingId = `BIS-CMP-${Math.floor(100000 + Math.random() * 900000)}`;
 
-  if (statusCard) {
-    statusCard.style.display = "block";
-  }
+  resultBox.classList.remove("error");
+  resultBox.style.display = "block";
 
-  if (statusTitle) {
-    statusTitle.textContent = t("complaintCreated");
-  }
+  resultBox.innerHTML =
+    `<div class="title">${escapeHtml(t("complaintCreated"))}</div>` +
+    `<div style="margin-top: 6px;">${escapeHtml(t("tracking"))} <strong>${trackingId}</strong></div>` +
+    `<div style="margin-top: 6px;">${escapeHtml(t("product"))} ${escapeHtml(product)}</div>` +
+    `<div>${escapeHtml(t("issue"))} ${escapeHtml(issue)}</div>` +
+    `<div style="margin-top: 8px;">${escapeHtml(t("complaintNote"))}</div>`;
 
-  if (reference) {
-    reference.textContent = trackingId;
-  }
-
-  if (statusBody) {
-    statusBody.innerHTML =
-      `${escapeHtml(t("tracking"))} <strong>${trackingId}</strong><br>` +
-      `${escapeHtml(t("product"))} ${escapeHtml(product)}<br>` +
-      `${escapeHtml(t("issue"))} ${escapeHtml(issueInput ? issueInput.value : "")}<br>` +
-      `${escapeHtml(t("complaintNote"))}`;
-  }
-
-  if (trackInput) {
-    trackInput.value = trackingId;
-  }
-
-  productInput.value = "";
-  descriptionInput.value = "";
-
-  if (locationInput) {
-    locationInput.value = "";
-  }
+  document.getElementById("complaint-form").reset();
 }
+
 
 /* =========================================================
    12. MANUFACTURER SCHEMES
    ========================================================= */
 
-const schemeNameMap = {
-  scheme1: "ISI Mark (Scheme I)",
-  scheme2: "CRS (Scheme II)",
-  fmcs: "FMCS",
-  ecomark: "ECO Mark"
-};
-
 function setupSchemeCards() {
-  const schemeCards = document.querySelectorAll(".scheme-select-card");
-  const title = document.getElementById("schemeProcessTitle");
-  const subtitle = document.getElementById("schemeProcessSubtitle");
-  const stepsContainer = document.getElementById("schemeStepsContainer");
+  const schemeCards = document.querySelectorAll(".scheme-card");
+  const detailBox = document.getElementById("scheme-detail");
 
   schemeCards.forEach((card) => {
     card.addEventListener("click", () => {
       schemeCards.forEach((item) => {
-        item.classList.remove("active");
+        item.classList.remove("selected");
       });
 
-      card.classList.add("active");
+      card.classList.add("selected");
 
-      const schemeName = schemeNameMap[card.dataset.scheme];
-      const byLanguage = schemeSteps[schemeName] || {};
-      const steps = byLanguage[selectedLanguage] || byLanguage.en || [];
+      const schemeName = card.dataset.scheme;
+      const byLang = schemeSteps[schemeName] || {};
+      const steps = byLang[selectedLanguage] || byLang.en || [];
 
-      if (title) {
-        title.textContent = schemeName || "Certification Roadmap";
-      }
+      const stepsHtml = steps
+        .map((step) => `<li>${escapeHtml(step)}</li>`)
+        .join("");
 
-      if (subtitle) {
-        subtitle.textContent = t("stepsTitle");
-      }
+      detailBox.innerHTML =
+        `<div class="title">${escapeHtml(schemeName)} — ${escapeHtml(t("stepsTitle"))}</div>` +
+        `<ol>${stepsHtml}</ol>`;
 
-      if (stepsContainer) {
-        stepsContainer.innerHTML = steps
-          .map(
-            (step, index) => `
-              <li class="process-step-item">
-                <div class="step-num-badge">${index + 1}</div>
-                <div class="step-content">
-                  <strong>${escapeHtml(step)}</strong>
-                </div>
-              </li>
-            `
-          )
-          .join("");
-      }
+      detailBox.style.display = "block";
     });
   });
 }
+
 
 /* =========================================================
    13. MODAL FUNCTIONS
@@ -1199,120 +1150,84 @@ function openModal(key) {
     return;
   }
 
-  const title = document.getElementById("modalTitle");
-  const body = document.getElementById("modalBody");
+  document.getElementById("modal-title").textContent = t(key);
+  document.getElementById("modal-body").textContent = t(`${key}Body`);
 
-  if (title) {
-    title.textContent = t(key);
-  }
-
-  if (body) {
-    body.textContent = t(`${key}Body`);
-  }
-
-  if (modalOverlay) {
-    modalOverlay.classList.add("open");
-  }
+  modalOverlay.classList.add("show");
 }
 
 function closeModal() {
-  if (modalOverlay) {
-    modalOverlay.classList.remove("open");
-  }
+  modalOverlay.classList.remove("show");
 }
+
 
 /* =========================================================
    14. EVENT LISTENERS
    ========================================================= */
 
 function setupEventListeners() {
-  const continueButton = document.getElementById("btnContinueLanguage");
-  const chatSendButton = document.getElementById("btnChatSend");
-  const verifyButton = document.getElementById("btnVerifyAction");
-  const complaintButton = document.getElementById("btnSubmitComplaint");
-  const trackButton = document.getElementById("btnTrackLookup");
-  const trackInput = document.getElementById("trackInput");
-  const languageMicButton = document.getElementById("langVoiceBtn");
-  const chatMicButton = document.getElementById("chatMicBtn");
-  const modalCloseButton = document.getElementById("btnModalClose");
+  document.getElementById("continue-btn").addEventListener("click", () => {
+    applyStaticText();
+    showView("view-chat");
 
-  if (continueButton) {
-    continueButton.addEventListener("click", () => {
+    if (chatLanguage !== selectedLanguage) {
       initializeChat();
-      showView("view-search");
-    });
-  }
+    }
+  });
 
-  if (chatSendButton) {
-    chatSendButton.addEventListener("click", sendSearchMessage);
-  }
+  document.getElementById("chat-send").addEventListener("click", sendChatMessage);
 
-  if (chatInput) {
-    chatInput.addEventListener("keydown", (event) => {
-      if (isPlainEnter(event)) {
-        event.preventDefault();
-        sendSearchMessage();
-      }
-    });
-  }
+  chatInput.addEventListener("keydown", (event) => {
+    if (isPlainEnter(event)) {
+      event.preventDefault();
+      sendChatMessage();
+    }
+  });
 
-  if (verifyButton) {
-    verifyButton.addEventListener("click", verifyLicense);
-  }
+  document.getElementById("search-send").addEventListener("click", sendSearchMessage);
 
-  if (complaintButton) {
-    complaintButton.addEventListener("click", submitComplaint);
-  }
+  searchInput.addEventListener("keydown", (event) => {
+    if (isPlainEnter(event)) {
+      event.preventDefault();
+      sendSearchMessage();
+    }
+  });
 
-  if (trackButton) {
-    trackButton.addEventListener("click", () => {
-      const statusCard = document.getElementById("complaintStatusCard");
-      const statusTitle = document.getElementById("compStatusTitle");
+  document.getElementById("verify-btn").addEventListener("click", verifyLicense);
 
-      if (!trackInput || !trackInput.value.trim()) {
-        alert("Please enter a complaint reference ID.");
-        return;
-      }
+  document
+    .getElementById("complaint-form")
+    .addEventListener("submit", submitComplaint);
 
-      if (statusCard) {
-        statusCard.style.display = "block";
-      }
+  document.getElementById("mic-btn").addEventListener("click", () => {
+    alert(t("voiceMsg"));
+  });
 
-      if (statusTitle) {
-        statusTitle.textContent = "Complaint tracking demo";
-      }
-    });
-  }
-
-  if (languageMicButton) {
-    languageMicButton.addEventListener("click", () => {
-      alert(t("voiceMsg"));
-    });
-  }
-
-  if (chatMicButton) {
-    chatMicButton.addEventListener("click", () => {
-      alert(t("voiceMsg"));
-    });
-  }
-
-  document.querySelectorAll(".footer-btn").forEach((button) => {
+  document.querySelectorAll(".back-btn").forEach((button) => {
     button.addEventListener("click", () => {
-      openModal(button.dataset.modal);
+      showView(button.dataset.back);
     });
   });
 
-  if (modalCloseButton) {
-    modalCloseButton.addEventListener("click", closeModal);
-  }
+  document.getElementById("footer-about").addEventListener("click", () => {
+    openModal("about");
+  });
 
-  if (modalOverlay) {
-    modalOverlay.addEventListener("click", (event) => {
-      if (event.target === modalOverlay) {
-        closeModal();
-      }
-    });
-  }
+  document.getElementById("footer-privacy").addEventListener("click", () => {
+    openModal("privacy");
+  });
+
+  document.getElementById("footer-contact").addEventListener("click", () => {
+    openModal("contact");
+  });
+
+  document.getElementById("modal-close").addEventListener("click", closeModal);
+
+  modalOverlay.addEventListener("click", (event) => {
+    if (event.target === modalOverlay) {
+      closeModal();
+    }
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
@@ -1320,6 +1235,7 @@ function setupEventListeners() {
     }
   });
 }
+
 
 /* =========================================================
    15. START APPLICATION

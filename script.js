@@ -1272,6 +1272,86 @@ function closeModal() {
     modalOverlay.classList.remove("open");
   }
 }
+
+function translateTabs() {
+  const tabText = {
+    en: {
+      language: "Language",
+      verify: "Verify ISI",
+      search: "IS-Code Search",
+      complaints: "Complaints",
+      manufacturer: "Manufacturer Help"
+    },
+    hi: {
+      language: "भाषा",
+      verify: "ISI सत्यापन",
+      search: "IS-कोड खोज",
+      complaints: "शिकायतें",
+      manufacturer: "निर्माता सहायता"
+    },
+    gu: {
+      language: "ભાષા",
+      verify: "ISI ચકાસણી",
+      search: "IS-કોડ શોધ",
+      complaints: "ફરિયાદો",
+      manufacturer: "ઉત્પાદક સહાય"
+    },
+    te: {
+      language: "భాష",
+      verify: "ISI ధృవీకరణ",
+      search: "IS-కోడ్ శోధన",
+      complaints: "ఫిర్యాదులు",
+      manufacturer: "తయారీదారు సహాయం"
+    },
+    ta: {
+      language: "மொழி",
+      verify: "ISI சரிபார்ப்பு",
+      search: "IS-குறியீடு தேடல்",
+      complaints: "புகார்கள்",
+      manufacturer: "உற்பத்தியாளர் உதவி"
+    },
+    bn: {
+      language: "ভাষা",
+      verify: "ISI যাচাই",
+      search: "IS-কোড অনুসন্ধান",
+      complaints: "অভিযোগ",
+      manufacturer: "প্রস্তুতকারক সহায়তা"
+    },
+    mr: {
+      language: "भाषा",
+      verify: "ISI पडताळणी",
+      search: "IS-कोड शोध",
+      complaints: "तक्रारी",
+      manufacturer: "उत्पादक मदत"
+    },
+    kn: {
+      language: "ಭಾಷೆ",
+      verify: "ISI ಪರಿಶೀಲನೆ",
+      search: "IS-ಕೋಡ್ ಹುಡುಕಾಟ",
+      complaints: "ದೂರುಗಳು",
+      manufacturer: "ತಯಾರಕ ಸಹಾಯ"
+    }
+  };
+
+  const labels = tabText[selectedLanguage] || tabText.en;
+
+  Object.keys(labels).forEach((tabName) => {
+    const tabButton = document.querySelector(
+      `.tab-btn[data-tab="${tabName}"]`
+    );
+
+    if (!tabButton) {
+      return;
+    }
+
+    const label = tabButton.querySelector(".tab-label-en");
+
+    if (label) {
+      label.textContent = labels[tabName];
+    }
+  });
+}
+
 function addBackButtons() {
   const backLabels = {
     en: "← Back",
@@ -1450,7 +1530,7 @@ function startApp() {
   addBackButtons();
   setupSchemeCards();
   setupEventListeners();
-
+  translateTabs();
   showView(getLanguageViewId());
 }
 

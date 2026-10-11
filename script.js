@@ -115,6 +115,7 @@ const ui = {
     code: "Code",
     title: "Title",
     category: "Category",
+    searchImportant: "Important: Confirm the exact applicable standard using official BIS resources before manufacturing or certification.",
     searchNone: "No illustrative match was found. Try keywords such as LED bulb, helmet, cement, cable, toy, steel, pressure cooker, or drinking water bottle.",
     verifyEmpty: "Please enter a licence number or HUID.",
     verifyTitle: "Demo verification result",
@@ -146,6 +147,7 @@ const ui = {
     code: "कोड",
     title: "शीर्षक",
     category: "श्रेणी",
+    searchImportant: "महत्वपूर्ण: निर्माण या प्रमाणन से पहले आधिकारिक BIS स्रोतों से सटीक लागू मानक की पुष्टि अवश्य करें।",
     searchNone: "कोई उदाहरण मिलान नहीं मिला। LED bulb, helmet, cement, cable, toy, steel, pressure cooker या drinking water bottle जैसे शब्द आज़माएँ।",
     verifyEmpty: "कृपया लाइसेंस नंबर या HUID दर्ज करें।",
     verifyTitle: "डेमो सत्यापन परिणाम",
@@ -177,6 +179,7 @@ const ui = {
     code: "குறியீடு",
     title: "தலைப்பு",
     category: "வகை",
+    searchImportant: "முக்கியம்: உற்பத்தி அல்லது சான்றிதழுக்கு முன் அதிகாரப்பூர்வ BIS ஆதாரங்களில் சரியான தரநிலையை உறுதிப்படுத்துங்கள்.",
     searchNone: "எடுத்துக்காட்டு பொருத்தம் எதுவும் கிடைக்கவில்லை. LED bulb, helmet, cement, cable, toy, steel, pressure cooker அல்லது drinking water bottle போன்ற சொற்களை முயற்சிக்கவும்.",
     verifyEmpty: "உரிம எண் அல்லது HUID ஐ உள்ளிடவும்.",
     verifyTitle: "டெமோ சரிபார்ப்பு முடிவு",
@@ -208,6 +211,7 @@ const ui = {
     code: "কোড",
     title: "শিরোনাম",
     category: "বিভাগ",
+    searchImportant: "গুরুত্বপূর্ণ: উৎপাদন বা সার্টিফিকেশনের আগে সরকারি BIS সূত্রে সঠিক প্রযোজ্য মান নিশ্চিত করুন।",
     searchNone: "কোনো উদাহরণ মিল পাওয়া যায়নি। LED bulb, helmet, cement, cable, toy, steel, pressure cooker বা drinking water bottle-এর মতো শব্দ চেষ্টা করুন।",
     verifyEmpty: "অনুগ্রহ করে লাইসেন্স নম্বর বা HUID লিখুন।",
     verifyTitle: "ডেমো যাচাইকরণের ফলাফল",
@@ -239,6 +243,7 @@ const ui = {
     code: "కోడ్",
     title: "శీర్షిక",
     category: "వర్గం",
+    searchImportant: "ముఖ్యం: తయారీ లేదా ధృవీకరణకు ముందు అధికారిక BIS వనరులలో సరైన ప్రమాణాన్ని నిర్ధారించుకోండి.",
     searchNone: "ఉదాహరణ సరిపోలిక ఏదీ దొరకలేదు. LED bulb, helmet, cement, cable, toy, steel, pressure cooker లేదా drinking water bottle వంటి పదాలను ప్రయత్నించండి.",
     verifyEmpty: "దయచేసి లైసెన్స్ నంబర్ లేదా HUID నమోదు చేయండి.",
     verifyTitle: "డెమో ధృవీకరణ ఫలితం",
@@ -270,6 +275,7 @@ const ui = {
     code: "कोड",
     title: "शीर्षक",
     category: "श्रेणी",
+    searchImportant: "महत्त्वाचे: उत्पादन किंवा प्रमाणनापूर्वी अधिकृत BIS स्रोतांवरून अचूक लागू मानकाची खात्री करा.",
     searchNone: "कोणताही उदाहरण जुळणारा निकाल सापडला नाही. LED bulb, helmet, cement, cable, toy, steel, pressure cooker किंवा drinking water bottle असे शब्द वापरून पहा.",
     verifyEmpty: "कृपया परवाना क्रमांक किंवा HUID प्रविष्ट करा.",
     verifyTitle: "डेमो पडताळणी निकाल",
@@ -301,6 +307,7 @@ const ui = {
     code: "કોડ",
     title: "શીર્ષક",
     category: "શ્રેણી",
+    searchImportant: "મહત્વપૂર્ણ: ઉત્પાદન અથવા પ્રમાણન પહેલાં સત્તાવાર BIS સ્રોતોથી સાચા લાગુ ધોરણની ખાતરી કરો.",
     searchNone: "કોઈ ઉદાહરણ મેળ મળ્યો નથી. LED bulb, helmet, cement, cable, toy, steel, pressure cooker અથવા drinking water bottle જેવા શબ્દો અજમાવો.",
     verifyEmpty: "કૃપા કરીને લાઇસન્સ નંબર અથવા HUID દાખલ કરો.",
     verifyTitle: "ડેમો ચકાસણી પરિણામ",
@@ -332,6 +339,7 @@ const ui = {
     code: "ಕೋಡ್",
     title: "ಶೀರ್ಷಿಕೆ",
     category: "ವರ್ಗ",
+    searchImportant: "ಮುಖ್ಯ: ಉತ್ಪಾದನೆ ಅಥವಾ ಪ್ರಮಾಣೀಕರಣಕ್ಕೆ ಮೊದಲು ಅಧಿಕೃತ BIS ಮೂಲಗಳಲ್ಲಿ ಸರಿಯಾದ ಮಾನದಂಡವನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
     searchNone: "ಯಾವುದೇ ಉದಾಹರಣೆ ಹೊಂದಾಣಿಕೆ ಸಿಗಲಿಲ್ಲ. LED bulb, helmet, cement, cable, toy, steel, pressure cooker ಅಥವಾ drinking water bottle ಮುಂತಾದ ಪದಗಳನ್ನು ಪ್ರಯತ್ನಿಸಿ.",
     verifyEmpty: "ದಯವಿಟ್ಟು ಪರವಾನಗಿ ಸಂಖ್ಯೆ ಅಥವಾ HUID ನಮೂದಿಸಿ.",
     verifyTitle: "ಡೆಮೊ ಪರಿಶೀಲನೆ ಫಲಿತಾಂಶ",
@@ -1036,6 +1044,7 @@ function sendSearchMessage() {
         `${t("code")}: ${match.code}\n` +
         `${t("title")}: ${match.title}\n` +
         `${t("category")}: ${categoryText}\n\n` +
+        `${t("searchImportant")}`,
         searchBox
       );
 

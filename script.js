@@ -1,3 +1,47 @@
+
+
+const languageNames = {
+  en: "English", hi: "Hindi", gu: "Gujarati", te: "Telugu",
+  ta: "Tamil", bn: "Bengali", mr: "Marathi", kn: "Kannada"
+};
+
+async function askGemini(userMessage) {
+  const language = languageNames[selectedLanguage] || "English";
+
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{
+              text:
+                "You are a helpful assistant for BIS (Bureau of Indian Standards) services: " +
+                "ISI mark and hallmark verification, IS codes, consumer complaints, and manufacturer certification schemes. " +
+                "Keep answers short and simple. If you are not sure about a specific IS code or license number, say so and advise checking the official BIS website. " +
+                `Always reply in ${language}.`
+            }]
+          },
+          contents: [{ role: "user", parts: [{ text: userMessage }] }]
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Gemini error:", data);
+      return "Sorry, the AI service is not available right now.";
+    }
+
+    return data.candidates[0].content.parts[0].text;
+  } catch (err) {
+    console.error(err);
+    return "Sorry, something went wrong. Please check your internet connection.";
+  }
+}
 "use strict";
 
 /* =========================================================
@@ -694,10 +738,11 @@ const schemeSteps = {
 };
 
 
+
 /* =========================================================
    5. DOM ELEMENTS
    ========================================================= */
-
+   
 let chatBox;
 let chatInput;
 let searchBox;
@@ -1019,7 +1064,7 @@ function findIsCode(userText) {
   });
 }
 
-function sendSearchMessage() {
+async function sendSearchMessage() {
   const text = searchInput.value.trim();
 
   if (!text) {
@@ -1029,30 +1074,32 @@ function sendSearchMessage() {
   addMessage("user", text, searchBox);
   searchInput.value = "";
 
-  setTimeout(() => {
-    const match = findIsCode(text);
+  const match = findIsCode(text);
 
-    if (match) {
-      const categoryText =
-        (categoryNames[match.category] &&
-          (categoryNames[match.category][selectedLanguage] || categoryNames[match.category].en)) ||
-        match.category;
+  // 1) Found in your own database -> show exact answer
+  if (match) {
+    const categoryText =
+      (categoryNames[match.category] &&
+        (categoryNames[match.category][selectedLanguage] || categoryNames[match.category].en)) ||
+      match.category;
 
-      addMessage(
-        "assistant",
-        `${t("searchHeader")}\n\n` +
-        `${t("code")}: ${match.code}\n` +
-        `${t("title")}: ${match.title}\n` +
-        `${t("category")}: ${categoryText}\n\n` +
-        `${t("searchImportant")}`,
-        searchBox
-      );
+    addMessage(
+      "assistant",
+      `${t("searchHeader")}\n\n` +
+      `${t("code")}: ${match.code}\n` +
+      `${t("title")}: ${match.title}\n` +
+      `${t("category")}: ${categoryText}\n\n` +
+      `${t("searchImportant")}`,
+      searchBox
+    );
+    return;
+  }
 
-      return;
-    }
-
-    addMessage("assistant", t("searchNone"), searchBox);
-  }, 400);
+  // 2) Not found -> ask Gemini
+  addMessage("assistant", "...", searchBox);   // temporary "thinking" message
+  const answer = await askGemini(text);
+  searchBox.lastChild.remove();                // remove the "..." message
+  addMessage("assistant", answer, searchBox);
 }
 
 

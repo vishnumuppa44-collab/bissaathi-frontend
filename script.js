@@ -1,42 +1,38 @@
-
-
-const languageNames = {
-  en: "English", hi: "Hindi", gu: "Gujarati", te: "Telugu",
-  ta: "Tamil", bn: "Bengali", mr: "Marathi", kn: "Kannada"
-};
-
-async function askGemini(userMessage) {
-  const language = languageNames[selectedLanguage] || "English";
-
+const API_URL = "https://bis-saathi-backend.onrender.com";
+ 
+let chatHistory = []; // keeps context for follow-up questions
+let historyLang = null;
+ 
+async function askClaude(userMessage) {
+  // reset memory when the user switches language
+  if (historyLang !== selectedLanguage) {
+    chatHistory = [];
+    historyLang = selectedLanguage;
+  }
+ 
   try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{
-              text:
-                "You are a helpful assistant for BIS (Bureau of Indian Standards) services: " +
-                "ISI mark and hallmark verification, IS codes, consumer complaints, and manufacturer certification schemes. " +
-                "Keep answers short and simple. If you are not sure about a specific IS code or license number, say so and advise checking the official BIS website. " +
-                `Always reply in ${language}.`
-            }]
-          },
-          contents: [{ role: "user", parts: [{ text: userMessage }] }]
-        })
-      }
-    );
-
+    const res = await fetch(`${API_URL}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: userMessage,
+        history: chatHistory,
+        lang: selectedLanguage
+      })
+    });
+ 
     const data = await res.json();
-
+ 
     if (!res.ok) {
-      console.error("Gemini error:", data);
+      console.error("Backend error:", data);
       return "Sorry, the AI service is not available right now.";
     }
-
-    return data.candidates[0].content.parts[0].text;
+ 
+    chatHistory.push({ role: "user", content: userMessage });
+    chatHistory.push({ role: "assistant", content: data.reply });
+    chatHistory = chatHistory.slice(-10);
+ 
+    return data.reply;
   } catch (err) {
     console.error(err);
     return "Sorry, something went wrong. Please check your internet connection.";
@@ -1097,7 +1093,7 @@ async function sendSearchMessage() {
 
   // 2) Not found -> ask Gemini
   addMessage("assistant", "...", searchBox);   // temporary "thinking" message
-  const answer = await askGemini(text);
+  const answer = await askClaude(text);
   searchBox.lastChild.remove();                // remove the "..." message
   addMessage("assistant", answer, searchBox);
 }
